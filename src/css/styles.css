@@ -8,3 +8,43 @@ body{
     height: 5rem;
     width: auto;
 }
+
+#title-scec{
+    text-align:left;
+    margin-right: 40px;
+    margin-left: 10px;
+    font-family:'Helvetica', sans-serif;
+    
+}
+
+b#s{
+    color: rgb(33, 29, 243);
+    font-size: 24px;
+}
+
+b#c1{
+    color:#e32bac;
+    font-size: 24px;
+}
+
+b#e{
+    color:rgb(23, 245, 23);
+    font-size: 24px;
+}
+
+b#c2{
+    color:#f78d0f;
+    font-size: 24px;
+}
+
+h6#sdu{
+    font-size: 13px;
+    text-align: left;
+}
+
+a.nav-link{
+    font-size: 20px;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    margin: 5px;
+}
