@@ -9,9 +9,10 @@ window.onload = function(){
     menuInicio.style.border = '1px solid white';
 }
 
-//Animaciones del Login.
 (function ($) {
     "use strict";
+
+
     /*==================================================================
     [ Focus input ]*/
     $('.input100').each(function(){
@@ -24,6 +25,7 @@ window.onload = function(){
             }
         })    
     })
+  
   
     /*==================================================================
     [ Validate ]*/
@@ -90,5 +92,6 @@ window.onload = function(){
         }
         
     });
+
 
 })(jQuery);

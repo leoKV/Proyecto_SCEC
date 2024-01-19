@@ -1,13 +1,17 @@
 body{
-
     background: #C9D6FF;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to left, #E2E2E2, #C9D6FF);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to left, #E2E2E2, #C9D6FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    position: relative;
+    position:relative;
+    margin-bottom: 60px;
 
+}
+
+.row{
+    margin:0px !important;
 }
 
 #logo-gto{
@@ -43,6 +47,22 @@ b#c2{
     font-size: 24px;
 }
 
+b#sT{
+    color: rgb(33, 29, 243);
+}
+
+b#c1T{
+    color:#e32bac;
+}
+
+b#eT{
+    color:rgb(23, 245, 23);
+}
+
+b#c2T{
+    color:#f78d0f;
+}
+
 h6#sdu{
     font-size: 13px;
     text-align: left;
@@ -63,11 +83,14 @@ a.nav-link{
     color: white;
     text-align: center;
     z-index: 2;
+    margin-top: 60px;
 }
 
-.content {
+.contenido {
     /* Agrega margen inferior igual a la altura del footer para evitar que el contenido se solape con el footer */
     margin-bottom: 60px; /* Ajusta según sea necesario */
+    position:relative;
+    z-index: 2;
 }
 
 .f1{
@@ -96,4 +119,26 @@ a.nav-link{
 .r1{
     margin-top:20px;
     color: white !important;
+}
+
+.card-title{
+    color: white !important;
+    text-align: center;
+    font-size: 42px;
+    font-family:'Trebuchet MS';
+}
+
+#welcome{
+    background: #9CECFB;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #0052D4, #65C7F7, #9CECFB);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #0052D4, #65C7F7, #9CECFB); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+}
+
+div.carousel{
+    margin-top: 20px;
+}
+
+img.d-block{
+    border-radius: 8px;
 }

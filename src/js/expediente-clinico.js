@@ -8,3 +8,8 @@ window.onload = function(){
     menuInicio.style.background = 'linear-gradient(to right, #f80759, #bc4e9c)';
     menuInicio.style.border = '1px solid white';
 }
+
+$(document).ready( function () {
+    $('#myTable').DataTable({
+    });
+});

@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
      <!--Incluyendo Iconos de FontAwesome-->
      <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css">
+     <!--Incluyendo Hoja de estilo propia de Expedientes-->
+     <link rel="stylesheet" href="../css/expedientes.css">
+     <!--Incluyendo Datatables-->
+     <link rel="stylesheet" href="../../node_modules/datatables/media/css/jquery.dataTables.min.css">
 </head>
 <body>
   <!--===========================Barra de navegación de la página===============================================================================================-->
@@ -41,8 +45,232 @@
       </nav>
       <!--===========================Contenido de la página===============================================================================================-->
       <section class="contenido">
-        <h1>Expedientes Clínicos</h1>
+        <h1 id="exp">Gestión de Expedientes Clínicos</h1>
+        <div class="row">
+          <div class="col-sm-4">
+            <button type="button" id="agregarExp" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAgregar"><i class="fa fa-plus"></i> Agregar Expediente</button>
+          </div>
+          <div class="col-sm-4">
+            <button type="button" id="depurarExp" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalDepurar">Depurar Expediente</button>
+          </div>
+          
+        </div>
+
+        <div id="tablaExpedientes">
+          <table id="myTable" class="table table-striped mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Número</th>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Dirección</th>
+                    <th>CURP</th>
+                    <th>Fecha de ingreso</th>
+                    <th>Tarjeta</th>
+                    <th>Reposición</th>
+                    <th>Fecha de nacimiento</th>
+                    <th>Ciudad de nacimiento</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A-0001</td>
+                    <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                    <td>R/N</td>
+                    <td>RICONADA NORTE #17, EL COLORADO</td>
+                    <td>1107728914-</td>
+                    <td>2018-07-01</td>
+                    <td>Si</td>
+                    <td>No</td>
+                    <td>2018-06-30</td>
+                    <td>SDU</td>
+                    <td>  
+                      <button type="button" id="" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalActualizar"><i class="fa fa-pencil"></i> Actualizar</button>
+                      <button type="button" id="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar"><i class="fa fa-trash"></i> Eliminar</button>
+                    </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>A-0001</td>
+                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                  <td>R/N</td>
+                  <td>RICONADA NORTE #17, EL COLORADO</td>
+                  <td>1107728914-</td>
+                  <td>2018-07-01</td>
+                  <td>Si</td>
+                  <td>No</td>
+                  <td>2018-06-30</td>
+                  <td>SDU</td>
+                  <td>  
+                    <button type="button" id="" class="btn btn-secondary"><i class="fa fa-pencil"></i> Actualizar</button>
+                    <button type="button" id="" class="btn btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                  </td>
+                </tr>    
+            </tbody>
+          </table>
+        </div>
       </section>
+
       <!--===========================Footer de la página===============================================================================================-->
       <section class="footer">
         <footer class="text-center text-white f1">
@@ -61,14 +289,388 @@
           </div>
         </footer>
       </section>
+
+
+      <!--=================Modales=============================-->
+      <!--Modal de Agregar nuevo expediente clínico-->
+      <div class="modal" id="modalAgregar">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header" id="headerAgregar">
+              <h5 class="modal-title">Agregar Nuevo Expediente Clínico</h5>
+              <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <form action="">
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="numero" class="form-label">Número</label>
+                      <input type="text" class="form-control" id="numero" placeholder="Escribe el número de expediente">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="nombre" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" id="nombre" placeholder="Escribe el nombre">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="edad" class="form-label">Edad</label>
+                      <input type="text" class="form-control" id="edad" placeholder="Escribe la edad">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="direccion" class="form-label">Dirección</label>
+                      <input type="text" class="form-control" id="direccion" placeholder="Escribe la direccióm">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="curp" class="form-label">CURP</label>
+                      <input type="text" class="form-control" id="curp" placeholder="Escribe la CURP">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="fechaIngreso" class="form-label">Fecha de Ingreso</label>
+                      <input type="date" class="form-control" id="fechaIngreso" placeholder="Introduce la fecha de ingreso">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Tarjeta</label>
+                      <select class="form-select">
+                        <option selected>¿Cuenta con tarjeta?</option>
+                        <option value="1">Si</option>
+                        <option value="2">No</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Reposición de Tarjeta</label>
+                      <select class="form-select">
+                        <option selected>¿Cuenta con reposición de tarjeta?</option>
+                        <option value="1">Si</option>
+                        <option value="2">No</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                      <input type="date" class="form-control" id="fechaNacimiento" placeholder="Introduce la fecha de nacimiento">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="ciudadNacimiento" class="form-label">Ciudad de nacimiento</label>
+                      <input type="text" class="form-control" id="ciudadNacimiento" placeholder="Escribe la ciudad de nacimiento">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button class="btn btn-info">Limpiar</button>
+                  <button type="submit" class="btn btn-success">Guardar</button>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <!--Modal de Actualizar expediente clínico-->
+      <div class="modal" id="modalActualizar">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header" id="headerActualizar">
+              <h5 class="modal-title">Actualizar Expediente Clínico</h5>
+              <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <form action="">
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="numero" class="form-label">Número</label>
+                      <input type="text" class="form-control" id="numero" placeholder="Escribe el número de expediente">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="nombre" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" id="nombre" placeholder="Escribe el nombre">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="edad" class="form-label">Edad</label>
+                      <input type="text" class="form-control" id="edad" placeholder="Escribe la edad">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="direccion" class="form-label">Dirección</label>
+                      <input type="text" class="form-control" id="direccion" placeholder="Escribe la direccióm">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="curp" class="form-label">CURP</label>
+                      <input type="text" class="form-control" id="curp" placeholder="Escribe la CURP">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="fechaIngreso" class="form-label">Fecha de Ingreso</label>
+                      <input type="date" class="form-control" id="fechaIngreso" placeholder="Introduce la fecha de ingreso">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Tarjeta</label>
+                      <select class="form-select">
+                        <option selected>¿Cuenta con tarjeta?</option>
+                        <option value="1">Si</option>
+                        <option value="2">No</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label">Reposición de Tarjeta</label>
+                      <select class="form-select">
+                        <option selected>¿Cuenta con reposición de tarjeta?</option>
+                        <option value="1">Si</option>
+                        <option value="2">No</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                      <input type="date" class="form-control" id="fechaNacimiento" placeholder="Introduce la fecha de nacimiento">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="ciudadNacimiento" class="form-label">Ciudad de nacimiento</label>
+                      <input type="text" class="form-control" id="ciudadNacimiento" placeholder="Escribe la ciudad de nacimiento">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button class="btn btn-info">Limpiar</button>
+                  <button type="submit" class="btn btn-success">Guardar</button>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+       <!--Modal de Eliminar expediente clínico-->
+       <div class="modal" id="modalEliminar">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header" id="headerEliminar">
+              <h5 class="modal-title">Eliminar Expediente Clínico</h5>
+              <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <h3>¿Estas seguro(a) de que quieres eliminar este expediente?</h3>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--Modal de Depurar expediente clínico-->
+      <div class="modal" id="modalDepurar">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header" id="headerDepurar">
+              <h5 class="modal-title">Depuración de Expedientes Clínicos</h5>
+              <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <h3>Expedientes por depurar</h3>
+              <p>El siguiente listado contiene expedientes clínicos sin consulta vigente, de los cuales han expirado sus 5 años de vigencia y requieren ser depurados.</p>
+              <button class="btn btn-dark" data-bs-dismiss="modal">Depurar expedientes</button>
+
+              <!--Tabla de expedintes por depurar-->
+              <div id="tablaExpedientes">
+                <table id="myTable" class="table table-striped mt-3">
+                  <thead class="table-dark">
+                      <tr>
+                          <th>Número</th>
+                          <th>Nombre</th>
+                          <th>Edad</th>
+                          <th>Dirección</th>
+                          <th>CURP</th>
+                          <th>Fecha de ingreso</th>
+                          <th>Tarjeta</th>
+                          <th>Reposición</th>
+                          <th>Fecha de nacimiento</th>
+                          <th>Ciudad de nacimiento</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                        <td>A-0001</td>
+                        <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                        <td>R/N</td>
+                        <td>RICONADA NORTE #17, EL COLORADO</td>
+                        <td>1107728914-</td>
+                        <td>2018-07-01</td>
+                        <td>Si</td>
+                        <td>No</td>
+                        <td>2018-06-30</td>
+                        <td>SDU</td>
+                      </tr>
+                      <tr>
+                        <td>A-0001</td>
+                        <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                        <td>R/N</td>
+                        <td>RICONADA NORTE #17, EL COLORADO</td>
+                        <td>1107728914-</td>
+                        <td>2018-07-01</td>
+                        <td>Si</td>
+                        <td>No</td>
+                        <td>2018-06-30</td>
+                        <td>SDU</td>
+                      </tr>
+                      <tr>
+                        <td>A-0001</td>
+                        <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                        <td>R/N</td>
+                        <td>RICONADA NORTE #17, EL COLORADO</td>
+                        <td>1107728914-</td>
+                        <td>2018-07-01</td>
+                        <td>Si</td>
+                        <td>No</td>
+                        <td>2018-06-30</td>
+                        <td>SDU</td>
+                      </tr>
+                      <tr>
+                        <td>A-0001</td>
+                        <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                        <td>R/N</td>
+                        <td>RICONADA NORTE #17, EL COLORADO</td>
+                        <td>1107728914-</td>
+                        <td>2018-07-01</td>
+                        <td>Si</td>
+                        <td>No</td>
+                        <td>2018-06-30</td>
+                        <td>SDU</td>
+                      </tr>
+                      <tr>
+                        <td>A-0001</td>
+                        <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                        <td>R/N</td>
+                        <td>RICONADA NORTE #17, EL COLORADO</td>
+                        <td>1107728914-</td>
+                        <td>2018-07-01</td>
+                        <td>Si</td>
+                        <td>No</td>
+                        <td>2018-06-30</td>
+                        <td>SDU</td>
+                      </tr>
+                      <tr>
+                        <td>A-0001</td>
+                        <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                        <td>R/N</td>
+                        <td>RICONADA NORTE #17, EL COLORADO</td>
+                        <td>1107728914-</td>
+                        <td>2018-07-01</td>
+                        <td>Si</td>
+                        <td>No</td>
+                        <td>2018-06-30</td>
+                        <td>SDU</td>
+                      </tr>
+                      <tr>
+                        <td>A-0001</td>
+                        <td>AGUILAR REYNA JONATHAN VICENTE</td>
+                        <td>R/N</td>
+                        <td>RICONADA NORTE #17, EL COLORADO</td>
+                        <td>1107728914-</td>
+                        <td>2018-07-01</td>
+                        <td>Si</td>
+                        <td>No</td>
+                        <td>2018-06-30</td>
+                        <td>SDU</td>
+                      </tr>  
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <!--===========================Sección de Scripts de la página===============================================================================================-->
-    <!-- Incluyendo Popper.js -->
-    <script src="../../node_modules/popper.js/dist/umd/popper.min.js"></script>
     <!-- Incluyendo jQuery-->
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+     <!-- Incluyendo Popper.js -->
+     <script src="../../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <!-- Incluyendo Bootstrap.js-->
     <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-
+    <!--Inclutendo Script propio de expedientes-->
     <script src="../js/expediente-clinico.js"></script>
+    <!--Incluyendo Script de datatables-->
+    <script src="../../node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
 </body>
 </html>
