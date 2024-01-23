@@ -19,6 +19,7 @@ h1#exp{
 }
 
 
+
 #modalAgregar{
     font-family: 'Arial', sans-serif;
 }
@@ -55,4 +56,13 @@ h1#exp{
     color: white;
 }
 
+
+#modalConfirmDep{
+    font-family: 'Arial', sans-serif;
+}
+
+#headerConfirmDep{
+    background-color:#b71540;
+    color: white;
+}
 

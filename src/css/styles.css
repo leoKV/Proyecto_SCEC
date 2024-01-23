@@ -3,7 +3,7 @@ body{
     background: -webkit-linear-gradient(to left, #E2E2E2, #C9D6FF);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to left, #E2E2E2, #C9D6FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     margin: 0;
-    padding: 0;
+    padding-bottom: 7em;
     min-height: 100vh;
     position:relative;
     margin-bottom: 60px;
@@ -76,7 +76,7 @@ a.nav-link{
 }
 
 .footer {
-    position: fixed;
+    position:fixed;
     bottom: 0;
     width: 100%;
     background-color: #0a4275;
