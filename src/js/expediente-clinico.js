@@ -10,7 +10,7 @@ window.onload = function(){
 }
 
 // expediente.js
-window.electronAPI.hello();
+
 
 const { remote } = window.electronAPI;
 
@@ -22,31 +22,53 @@ $(document).ready( function () {
 //Capturando valores del formulario
 const formAgregar = document.getElementById('formAgregarExp')
 
-const expNumero = document.getElementById('numero');
+const expFolio = document.getElementById('folio');
 const expNombre = document.getElementById('nombre');
 const expEdad = document.getElementById('edad');
 const expDireccion = document.getElementById('direccion');
 const expCurp = document.getElementById('curp');
-const expFechaIngreso = document.getElementById('fechaIngreso');
 const expTarjeta = document.getElementById('tarjeta');
 const expReposicion = document.getElementById('reposicionTarjeta');
 const expFechaNacimiento = document.getElementById('fechaNacimiento');
 const expCiudadNacimiento = document.getElementById('ciudadNacimiento');
 
-
 formAgregar.addEventListener('submit', (e) =>{
     e.preventDefault();
 
     const nuevoExpediente ={
-        numero: expNumero.value,
+        folio: expFolio.value,
         nombre: expNombre.value,
         edad: expEdad.value,
         direccion: expDireccion.value,
         curp: expCurp.value,
-        fechaIngreso: expFechaIngreso.value,
         tarjeta: expTarjeta.value,
-        reposicion: expReposicion.value,
+        reposicionTarjeta: expReposicion.value,
         fechaNacimiento: expFechaNacimiento.value,
-        ciudadNacimiento:expCiudadNacimiento.value
+        ciudad:expCiudadNacimiento.value
     }
+
+    window.electronAPI.createExp(nuevoExpediente);
+
+    limpiarCerrarModal();
 })
+
+window.electronAPI.listenExpInsertedSuccessfully(() => {
+    // Código para limpiar el formulario aquí si es necesario
+    limpiarCerrarModal();
+    /*
+    Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your work has been saved",
+        showConfirmButton: false,
+        timer: 1500
+    });
+    */
+});
+
+
+function limpiarCerrarModal(){
+    document.getElementById('formAgregarExp').reset()
+    $('#modalAgregar').modal('hide');
+}
+

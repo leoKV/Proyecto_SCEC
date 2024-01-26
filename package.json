@@ -19,6 +19,7 @@
     "jquery": "^3.7.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.7.1",
-    "promise-mysql": "^5.2.0"
+    "promise-mysql": "^5.2.0",
+    "sweetalert2": "^11.10.4"
   }
 }

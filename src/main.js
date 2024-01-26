@@ -1,11 +1,31 @@
 // main.js
-const { app, BrowserWindow, ipcMain, remote } = require('electron');
+const { BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const {getConnection} = require('./js/database')
 
-function hello() {
-    console.log('Hola amigos');
+//Función para crear nuevos expedientes clínicos
+async function createExp(expediente){
+    try{
+        const conn = await getConnection();
+        // Validación de nulos
+        Object.keys(expediente).forEach((key) => {
+            if (expediente[key] === '') {
+                expediente[key] = null;
+            }
+        });
+        const fechaNacimiento = new Date(expediente.fechaNacimiento);
+        expediente.fechaNacimiento = fechaNacimiento.toISOString().split('T')[0];
+
+        const result = await conn.query('INSERT INTO expediente SET ? ',expediente)
+
+        console.log(result)
+
+    }catch(error){
+        console.log(error)
+    }
+
 }
-  
+
 let mainWindow = null;
   
 function createWindow() {
@@ -23,37 +43,23 @@ function createWindow() {
 
 }
   
+/*
+ipcMain.on('createExp', (event, expediente) => {
+    createExp(expediente);
+});
+*/
+ipcMain.on('createExp', async (event, expediente) => {
+    try {
+        await createExp(expediente);
+        mainWindow.webContents.send('expInsertedSuccessfully');
+    } catch (error) {
+        console.log(error);
+    }
 
-ipcMain.on('hello', hello);
+});
   
 module.exports = {
     createWindow,
-    hello
+    createExp
 };
 
-
-/*
-const {BrowserWindow} = require('electron')
-
-function hello(){
-    console.log('Hola amigos')
-}
-
-let window
-function createWindow(){
-    window = new BrowserWindow({
-        width:1920,
-        height:1080,
-        webPreferences:{
-            nodeIntegration:true
-        }
-    })
-
-    window.loadFile('src/ui/index.html');
-}
-
-module.exports ={
-    createWindow,
-    hello
-}
-*/

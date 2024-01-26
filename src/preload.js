@@ -2,5 +2,10 @@
 const { contextBridge, ipcRenderer, remote } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  hello: () => ipcRenderer.send('hello'),
+  remote: remote,
+  createExp: (expediente) => ipcRenderer.send('createExp', expediente),
+
+  listenExpInsertedSuccessfully: (callback) => {
+    ipcRenderer.on('expInsertedSuccessfully', callback);
+  }
 });

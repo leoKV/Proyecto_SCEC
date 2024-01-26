@@ -150,8 +150,8 @@
                 <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
-                      <label for="numero" class="form-label">Número</label>
-                      <input type="text" class="form-control" id="numero" placeholder="Escribe el número de expediente">
+                      <label for="folio" class="form-label" required minlength="6" maxlength="6">No.Folio</label>
+                      <input type="text" class="form-control" id="folio" placeholder="Escribe el No.Folio de expediente">
                     </div>
                   </div>
 
@@ -183,51 +183,45 @@
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="curp" class="form-label">CURP</label>
-                      <input type="text" class="form-control" id="curp" placeholder="Escribe la CURP">
+                      <input type="text" class="form-control" id="curp" placeholder="Escribe la CURP" maxlength="18">
                     </div>
                   </div>
 
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <label for="fechaIngreso" class="form-label">Fecha de Ingreso</label>
-                      <input type="date" class="form-control" id="fechaIngreso" placeholder="Introduce la fecha de ingreso">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="tarjeta" class="form-label">Tarjeta</label>
                       <select class="form-select" id="tarjeta" name="tarjeta">
-                        <option selected>¿Cuenta con tarjeta?</option>
+                        <option selected value="NO">¿Cuenta con tarjeta?</option>
                         <option value="SI">Si</option>
                         <option value="NO">No</option>
                       </select>
                     </div>
                   </div>
 
+                </div>
+
+                <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="reposicionTarjeta" class="form-label">Reposición de Tarjeta</label>
                       <select class="form-select" id="reposicionTarjeta" name="reposicionTarjeta">
-                        <option selected>¿Cuenta con reposición de tarjeta?</option>
+                        <option selected value="NO">¿Cuenta con reposición de tarjeta?</option>
                         <option value="SI">Si</option>
                         <option value="NO">No</option>
                       </select>
                     </div>
                   </div>
-                </div>
 
-                <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
                       <input type="date" class="form-control" id="fechaNacimiento" placeholder="Introduce la fecha de nacimiento">
                     </div>
                   </div>
+                </div>
 
-                  <div class="col-lg-6">
+                <div class="row">
+                  <div class="col-lg-12">
                     <div class="mb-3">
                       <label for="ciudadNacimiento" class="form-label">Ciudad de nacimiento</label>
                       <input type="text" class="form-control" id="ciudadNacimiento" placeholder="Escribe la ciudad de nacimiento">
@@ -236,7 +230,7 @@
                 </div>
 
                 <div class="modal-footer">
-                  <button class="btn btn-info"><i class="fa fa-eraser"></i> Limpiar</button>
+                  <button type="reset" class="btn btn-info"><i class="fa fa-eraser"></i> Limpiar</button>
                   <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Guardar</button>
               </div>
               </form>
@@ -255,13 +249,12 @@
             </div>
 
             <div class="modal-body">
-              <form action="">
-
+              <form action="" id="formActualizarExp">
                 <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
-                      <label for="numero" class="form-label">Número</label>
-                      <input type="text" class="form-control" id="numero" placeholder="Escribe el número de expediente">
+                      <label for="folio" class="form-label">No.Folio</label>
+                      <input type="text" class="form-control" id="folio" placeholder="Escribe el No.Folio de expediente">
                     </div>
                   </div>
 
@@ -299,45 +292,39 @@
 
                   <div class="col-lg-6">
                     <div class="mb-3">
-                      <label for="fechaIngreso" class="form-label">Fecha de Ingreso</label>
-                      <input type="date" class="form-control" id="fechaIngreso" placeholder="Introduce la fecha de ingreso">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label">Tarjeta</label>
-                      <select class="form-select">
+                      <label for="tarjeta" class="form-label">Tarjeta</label>
+                      <select class="form-select" id="tarjeta" name="tarjeta">
                         <option selected>¿Cuenta con tarjeta?</option>
-                        <option value="1">Si</option>
-                        <option value="2">No</option>
+                        <option value="SI">Si</option>
+                        <option value="NO">No</option>
                       </select>
                     </div>
                   </div>
 
-                  <div class="col-lg-6">
-                    <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label">Reposición de Tarjeta</label>
-                      <select class="form-select">
-                        <option selected>¿Cuenta con reposición de tarjeta?</option>
-                        <option value="1">Si</option>
-                        <option value="2">No</option>
-                      </select>
-                    </div>
-                  </div>
                 </div>
 
                 <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="reposicionTarjeta" class="form-label">Reposición de Tarjeta</label>
+                      <select class="form-select" id="reposicionTarjeta" name="reposicionTarjeta">
+                        <option selected>¿Cuenta con reposición de tarjeta?</option>
+                        <option value="SI">Si</option>
+                        <option value="NO">No</option>
+                      </select>
+                    </div>
+                  </div>
+
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
                       <input type="date" class="form-control" id="fechaNacimiento" placeholder="Introduce la fecha de nacimiento">
                     </div>
                   </div>
+                </div>
 
-                  <div class="col-lg-6">
+                <div class="row">
+                  <div class="col-lg-12">
                     <div class="mb-3">
                       <label for="ciudadNacimiento" class="form-label">Ciudad de nacimiento</label>
                       <input type="text" class="form-control" id="ciudadNacimiento" placeholder="Escribe la ciudad de nacimiento">
@@ -354,7 +341,6 @@
           </div>
         </div>
       </div>
-
 
        <!--Modal de Eliminar expediente clínico-->
        <div class="modal" id="modalEliminar">
@@ -431,5 +417,6 @@
     <script src="../../node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
     <!--Incluyendo Script de font-awesome-->
     <script src="../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+    <script src="../../node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
 </body>
 </html>
