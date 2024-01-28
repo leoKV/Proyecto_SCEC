@@ -150,15 +150,18 @@
                 <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
-                      <label for="folio" class="form-label" required minlength="6" maxlength="6">No.Folio</label>
-                      <input type="text" class="form-control" id="folio" placeholder="Escribe el No.Folio de expediente">
+                      <label for="folio" class="form-label">No.Folio</label>
+                      <input type="text" class="form-control is-invalid"  id="folio" maxlength="6" minlength="6" placeholder="Escribe el No.Folio de expediente" required style="text-transform: uppercase;" >
+                      <div class="invalid-feedback">
+                        Por favor, escribe de manera correcta el número de folio.
+                      </div> 
                     </div>
                   </div>
 
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="nombre" class="form-label">Nombre</label>
-                      <input type="text" class="form-control" id="nombre" placeholder="Escribe el nombre">
+                      <input type="text" class="form-control" id="nombre" placeholder="Escribe el nombre"  style="text-transform: uppercase;">
                     </div>
                   </div>
                 </div>
@@ -167,14 +170,14 @@
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="edad" class="form-label">Edad</label>
-                      <input type="text" class="form-control" id="edad" placeholder="Escribe la edad">
+                      <input type="text" class="form-control" id="edad" placeholder="Escribe la edad"  style="text-transform: uppercase;">
                     </div>
                   </div>
 
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="direccion" class="form-label">Dirección</label>
-                      <input type="text" class="form-control" id="direccion" placeholder="Escribe la direccióm">
+                      <input type="text" class="form-control" id="direccion" placeholder="Escribe la dirección"  style="text-transform: uppercase;">
                     </div>
                   </div>
                 </div>
@@ -183,7 +186,10 @@
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="curp" class="form-label">CURP</label>
-                      <input type="text" class="form-control" id="curp" placeholder="Escribe la CURP" maxlength="18">
+                      <input type="text" class="form-control is-valid" id="curp" placeholder="Escribe la CURP"  minlength="18" maxlength="18"  style="text-transform: uppercase;">
+                      <div class="invalid-feedback">
+                        Por favor, escribe la curp de manera completa.
+                      </div> 
                     </div>
                   </div>
 
@@ -215,7 +221,7 @@
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                      <input type="date" class="form-control" id="fechaNacimiento" placeholder="Introduce la fecha de nacimiento">
+                      <input type="date" class="form-control" id="fechaNacimiento" placeholder="Introduce la fecha de nacimiento" >
                     </div>
                   </div>
                 </div>
@@ -224,7 +230,7 @@
                   <div class="col-lg-12">
                     <div class="mb-3">
                       <label for="ciudadNacimiento" class="form-label">Ciudad de nacimiento</label>
-                      <input type="text" class="form-control" id="ciudadNacimiento" placeholder="Escribe la ciudad de nacimiento">
+                      <input type="text" class="form-control" id="ciudadNacimiento" placeholder="Escribe la ciudad de nacimiento"  style="text-transform: uppercase;">
                     </div>
                   </div>
                 </div>
@@ -405,6 +411,8 @@
       </div>
     </div>
     <!--===========================Sección de Scripts de la página===============================================================================================-->
+
+
     <!-- Incluyendo jQuery-->
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <!-- Incluyendo Popper.js -->

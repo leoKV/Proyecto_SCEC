@@ -72,3 +72,45 @@ function limpiarCerrarModal(){
     $('#modalAgregar').modal('hide');
 }
 
+document.getElementById("folio").addEventListener("input", function() {
+    var input = this.value;
+
+    // Verifica la longitud del valor ingresado
+    if (input.length === 6) {
+      // Si es válido, elimina la clase is-invalid y agrega la clase is-valid
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      document.getElementById("folio-feedback").style.display = "none";
+    } else {
+      // Si no es válido, agrega la clase is-invalid y elimina la clase is-valid
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      document.getElementById("folio-feedback").style.display = "block";
+    }
+  });
+
+  document.getElementById("curp").addEventListener("input", function() {
+    var input = this.value;
+
+    // Verifica la longitud del valor ingresado
+    if (input.length === 0 || (input.length >= 1 && input.length === 18)) {
+      // Si es válido, elimina la clase is-invalid y agrega la clase is-valid
+      this.classList.remove("is-invalid");
+      this.classList.add("is-valid");
+      document.getElementById("curp-feedback").style.display = "none";
+    } else {
+      // Si no es válido, agrega la clase is-invalid y elimina la clase is-valid
+      this.classList.remove("is-valid");
+      this.classList.add("is-invalid");
+      document.getElementById("curp-feedback").style.display = "block";
+    }
+  });
+
+  document.getElementById("formAgregarExp").addEventListener("submit", function() {
+    var inputs = document.querySelectorAll('input[type="text"], input[type="date"]');
+    
+    inputs.forEach(function(input) {
+      input.value = input.value.toUpperCase();
+    });
+  });
+
