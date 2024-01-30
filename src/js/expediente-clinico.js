@@ -18,7 +18,6 @@ $(document).ready( function () {
     $('#myTable').DataTable({
     });
 });
-
 //Capturando valores del formulario
 const formAgregar = document.getElementById('formAgregarExp')
 
@@ -53,17 +52,29 @@ formAgregar.addEventListener('submit', (e) =>{
 })
 
 window.electronAPI.listenExpInsertedSuccessfully(() => {
-    // Código para limpiar el formulario aquí si es necesario
+    // Código para limpiar el formulario
     limpiarCerrarModal();
-    /*
     Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Your work has been saved",
-        showConfirmButton: false,
-        timer: 1500
-    });
-    */
+      position: "top-end",
+      icon: "success",
+      title: "¡Expediente creado correctamente!",
+      showConfirmButton: false,
+      timer: 4000
+  });
+});
+
+
+window.electronAPI.listenExpInsertError(() => {
+  // Código para limpiar el formulario
+  limpiarCerrarModal();
+  Swal.fire({
+      position: "top-end",
+      icon: 'error',
+      title: '¡Error al crear expediente!',
+      text: `Verifica que el No.Folio no se repita`,
+      showConfirmButton: false,
+      timer: 4500
+  });
 });
 
 
@@ -87,9 +98,9 @@ document.getElementById("folio").addEventListener("input", function() {
       this.classList.add("is-invalid");
       document.getElementById("folio-feedback").style.display = "block";
     }
-  });
+});
 
-  document.getElementById("curp").addEventListener("input", function() {
+document.getElementById("curp").addEventListener("input", function() {
     var input = this.value;
 
     // Verifica la longitud del valor ingresado
@@ -104,13 +115,13 @@ document.getElementById("folio").addEventListener("input", function() {
       this.classList.add("is-invalid");
       document.getElementById("curp-feedback").style.display = "block";
     }
-  });
+});
 
-  document.getElementById("formAgregarExp").addEventListener("submit", function() {
+document.getElementById("formAgregarExp").addEventListener("submit", function() {
     var inputs = document.querySelectorAll('input[type="text"], input[type="date"]');
     
     inputs.forEach(function(input) {
       input.value = input.value.toUpperCase();
     });
-  });
+});
 

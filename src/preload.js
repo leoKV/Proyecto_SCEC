@@ -7,5 +7,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   listenExpInsertedSuccessfully: (callback) => {
     ipcRenderer.on('expInsertedSuccessfully', callback);
+  },
+  listenExpInsertError: (callback) => {
+    ipcRenderer.on('expInsertError', callback);
   }
 });
