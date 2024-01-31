@@ -14,10 +14,68 @@ window.onload = function(){
 
 const { remote } = window.electronAPI;
 
-$(document).ready( function () {
-    $('#myTable').DataTable({
+$(document).ready(function() {
+  $('#mydatatable tfoot th').each( function () {
+      var title = $(this).text();
+      $(this).html( '<input type="text" placeholder="Filtrar.." />' );
+  } );
+
+  var table = $('#mydatatable').DataTable({
+      "dom": 'B<"float-left"i><"float-right"f>t<"float-left"l><"float-right"p><"clearfix">',
+      "responsive": false,
+      "language": {
+          "url": "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+      },
+      "order": [[ 0, "desc" ]],
+      "initComplete": function () {
+          this.api().columns().every( function () {
+              var that = this;
+
+              $( 'input', this.footer() ).on( 'keyup change', function () {
+                  if ( that.search() !== this.value ) {
+                      that
+                          .search( this.value )
+                          .draw();
+                      }
+              });
+          })
+      },
+      "columnDefs": [
+        {
+            "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // Última columna (donde deseas agregar los botones)
+            "render": function (data, type, full, meta) {
+                // Verificar si es la última columna antes de renderizar
+                if (meta.col !== 10) {
+                    // Renderizar los datos normales para las primeras 10 columnas
+                    return data;
+                } else {
+                    // Renderizar los botones solo en la última columna
+                    return `
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalActualizar"><i class="fa-solid fa-pen-to-square"></i> Actualizar</button>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar"><i class="fa fa-trash"></i> Eliminar</button>
+                    `;
+                }
+            }
+        }
+      ]
+  });
+
+   // Llamar a la función para obtener expedientes al inicio
+   window.electronAPI.getExp();
+   window.electronAPI.listenGetExp((event, expedientes) => {
+    console.log(expedientes);  // Agrega esta línea para imprimir los datos en la consola
+    // Limpiar la tabla y agregar los nuevos datos
+    table.clear().rows.add(expedientes).draw();
     });
+
+window.electronAPI.listenExpInsertError((event, errorMessage) => {
+    // Manejar el error como desees, por ejemplo, mostrar una alerta
+    alert(`Error al obtener expedientes: ${errorMessage}`);
 });
+
+
+});
+
 //Capturando valores del formulario
 const formAgregar = document.getElementById('formAgregarExp')
 

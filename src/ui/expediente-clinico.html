@@ -13,6 +13,8 @@
      <link rel="stylesheet" href="../css/expedientes.css">
      <!--Incluyendo Datatables-->
      <link rel="stylesheet" href="../../node_modules/datatables/media/css/jquery.dataTables.min.css">
+
+
 </head>
 <body>
   <!--===========================Barra de navegación de la página===============================================================================================-->
@@ -58,11 +60,11 @@
 
         <br>
 
-        <div id="tablaExpedientes">
-          <table id="myTable" class="table table-striped mt-3">
-            <thead class="table-dark">
-                <tr>
-                    <th>Número</th>
+        <div class="table-responsive" id="mydatatable-container">
+          <table class="records_list table table-striped table-bordered table-hover" id="mydatatable">
+              <thead class="table-dark">
+                  <tr>
+                    <th>No.Folio</th>
                     <th>Nombre</th>
                     <th>Edad</th>
                     <th>Dirección</th>
@@ -73,45 +75,46 @@
                     <th>Fecha de nacimiento</th>
                     <th>Ciudad de nacimiento</th>
                     <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>A-0001</td>
-                    <td>AGUILAR REYNA JONATHAN VICENTE</td>
-                    <td>R/N</td>
-                    <td>RICONADA NORTE #17, EL COLORADO</td>
-                    <td>1107728914-</td>
-                    <td>2018-07-01</td>
-                    <td>Si</td>
-                    <td>No</td>
-                    <td>2018-06-30</td>
-                    <td>SDU</td>
-                    <td>
-                      <button type="button" id="" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalActualizar"><i class="fa-solid fa-pen-to-square"></i> Actualizar</button>
-                      <button type="button" id="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar"><i class="fa fa-trash"></i> Eliminar</button>
-                    </td>
-                </tr>
+                  </tr>
+              </thead>
+              <tfoot>
+                  <tr>
+                      <th>Filter..</th>
+                      <th>Filter..</th>
+                      <th>Filter..</th>
+                      <th>Filter..</th>
+                      <th>Filter..</th>
+                      <th>Filter..</th>
+                      <th>Filter..</th>
+                      <th>Filter..</th>
+                      <th>Filter..</th>
+                      <th>Filter..</th>
+             
+                  </tr>
+              </tfoot>
+              <tbody id="expedientes-tbody">
+                <!--
+                                   <tr>
+                      <td>item 0 0</td>
+                      <td>item 0 1</td>
+                      <td>item 0 2</td>
+                      <td>item 0 3</td>
+                      <td>item 0 4</td>
+                      <td>item 0 5</td>
+                      <td>item 0 6</td>
+                      <td>item 0 7</td>
+                      <td>item 0 8</td>
+                      <td>item 0 9</td>
+                      <td>
+                        <button type="button" id="" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalActualizar"><i class="fa-solid fa-pen-to-square"></i> Actualizar</button>
+                        <button type="button" id="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar"><i class="fa fa-trash"></i> Eliminar</button>
+                      </td>
+                  </tr>
+                -->
 
-                <tr>
-                  <td>A-0001</td>
-                  <td>AGUILAR REYNA JONATHAN VICENTE</td>
-                  <td>R/N</td>
-                  <td>RICONADA NORTE #17, EL COLORADO</td>
-                  <td>1107728914-</td>
-                  <td>2018-07-01</td>
-                  <td>Si</td>
-                  <td>No</td>
-                  <td>2018-06-30</td>
-                  <td>SDU</td>
-                  <td>
-                    <button type="button" id="" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalActualizar"><i class="fa-solid fa-pen-to-square"></i> Actualizar</button>
-                    <button type="button" id="" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar"><i class="fa fa-trash"></i> Eliminar</button>
-                  </td>
-                </tr>
-            </tbody>
+              </tbody>
           </table>
-        </div>
+      </div>
 
       </section>
 
@@ -440,6 +443,8 @@
 
     <!-- Incluyendo jQuery-->
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- Incluyendo Ajax-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Incluyendo Popper.js -->
     <script src="../../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
     <!-- Incluyendo Bootstrap.js-->

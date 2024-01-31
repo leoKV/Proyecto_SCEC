@@ -12,7 +12,7 @@ h1#exp{
     margin-left: 20px;
 }
 
-#tablaExpedientes{
+#mydatatable-container{
     margin-top: 25px;
     margin-right: 15px;
     margin-left: 15px;
@@ -64,5 +64,12 @@ h1#exp{
 #headerConfirmDep{
     background-color:#b71540;
     color: white;
+}
+
+#mydatatable tfoot input{
+    width: 100% !important;
+}
+#mydatatable tfoot {
+    display: table-header-group !important;
 }
 

@@ -3,6 +3,25 @@ const { BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const {getConnection} = require('./js/database');
 
+let mainWindow = null;
+  
+function createWindow() {
+    mainWindow = new BrowserWindow({
+      width: 1920,
+      height: 1080,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: path.join(__dirname, 'preload.js'),
+      },
+    });
+  
+    mainWindow.loadFile('src/ui/index.html');
+}
+
+//Función para listar los expedientes clínicos
+
+
 //Función para crear nuevos expedientes clínicos
 async function createExp(expediente){
     try{
@@ -35,22 +54,6 @@ async function createExp(expediente){
 
 }
 
-let mainWindow = null;
-  
-function createWindow() {
-    mainWindow = new BrowserWindow({
-      width: 1920,
-      height: 1080,
-      webPreferences: {
-        nodeIntegration: false,
-        contextIsolation: true,
-        preload: path.join(__dirname, 'preload.js'),
-      },
-    });
-  
-    mainWindow.loadFile('src/ui/index.html');
-
-}
   
 ipcMain.on('createExp', async (event, expediente) => {
     try {
