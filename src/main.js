@@ -19,7 +19,19 @@ function createWindow() {
     mainWindow.loadFile('src/ui/index.html');
 }
 
-//Función para listar los expedientes clínicos
+
+// Modifica la función para obtener expedientes
+
+ipcMain.on('getExpedientes', async (event) => {
+    try {
+        const conn = await getConnection();
+        const result = await conn.query('SELECT folio,nombre,edad,direccion,curp,fechaIngreso,tarjeta,reposicionTarjeta,fechaNacimiento,ciudad FROM expediente');
+        event.reply('receiveExpedientes', result[0]);
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveExpedientes', []);
+    }
+});
 
 
 //Función para crear nuevos expedientes clínicos

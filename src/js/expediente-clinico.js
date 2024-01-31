@@ -28,52 +28,64 @@ $(document).ready(function() {
       },
       "order": [[ 0, "desc" ]],
       "initComplete": function () {
-          this.api().columns().every( function () {
-              var that = this;
+        // Solicitar expedientes al cargar la página
+        electronAPI.sendGetExpedientes();
 
-              $( 'input', this.footer() ).on( 'keyup change', function () {
-                  if ( that.search() !== this.value ) {
-                      that
-                          .search( this.value )
-                          .draw();
-                      }
-              });
-          })
-      },
-      "columnDefs": [
-        {
-            "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // Última columna (donde deseas agregar los botones)
-            "render": function (data, type, full, meta) {
-                // Verificar si es la última columna antes de renderizar
-                if (meta.col !== 10) {
-                    // Renderizar los datos normales para las primeras 10 columnas
-                    return data;
-                } else {
-                    // Renderizar los botones solo en la última columna
-                    return `
-                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalActualizar"><i class="fa-solid fa-pen-to-square"></i> Actualizar</button>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar"><i class="fa fa-trash"></i> Eliminar</button>
-                    `;
+        electronAPI.receiveExpedientes((expedientes) => {
+            table.clear();
+
+            expedientes.forEach(expediente => {
+                // Formatear las fechas antes de agregarlas a la tabla
+                var fechaIngresoFormateada = moment(expediente.fechaIngreso).format('DD/MM/YYYY');
+                if(expediente.fechaNacimiento !== null){
+                    var fechaNacimientoFormateada = moment(expediente.fechaNacimiento).format('DD/MM/YYYY');
+                }else{
+                    var fechaNacimientoFormateada = expediente.fechaNacimiento;
                 }
-            }
-        }
-      ]
+                
+                var opcionesHTML = `
+                    <button type="button" id="btnActualizarExp" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalActualizar">
+                        <i class="fa-solid fa-pen-to-square"></i> Actualizar
+                    </button>
+                    <button type="button" id="btnEliminarExp" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar">
+                        <i class="fa fa-trash"></i> Eliminar
+                    </button>
+                `;
+                table.row.add([
+                    expediente.folio,
+                    expediente.nombre,
+                    expediente.edad,
+                    expediente.direccion,
+                    expediente.curp,
+                    fechaIngresoFormateada,
+                    expediente.tarjeta,
+                    expediente.reposicionTarjeta,
+                    fechaNacimientoFormateada,
+                    expediente.ciudad,
+                    opcionesHTML
+                ]).draw();
+            });
+
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('focus', function () {
+                    // Desactivar eventos de búsqueda
+                    that.off('keyup change');
+                }).on('blur', function () {
+                    // Volver a activar eventos de búsqueda
+                    that.on('keyup change', function () {
+                        if (that.search() !== this.value) {
+                            that
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+                });
+            });
+        });
+    }
   });
-
-   // Llamar a la función para obtener expedientes al inicio
-   window.electronAPI.getExp();
-   window.electronAPI.listenGetExp((event, expedientes) => {
-    console.log(expedientes);  // Agrega esta línea para imprimir los datos en la consola
-    // Limpiar la tabla y agregar los nuevos datos
-    table.clear().rows.add(expedientes).draw();
-    });
-
-window.electronAPI.listenExpInsertError((event, errorMessage) => {
-    // Manejar el error como desees, por ejemplo, mostrar una alerta
-    alert(`Error al obtener expedientes: ${errorMessage}`);
-});
-
-
 });
 
 //Capturando valores del formulario
@@ -110,15 +122,19 @@ formAgregar.addEventListener('submit', (e) =>{
 })
 
 window.electronAPI.listenExpInsertedSuccessfully(() => {
-    // Código para limpiar el formulario
-    limpiarCerrarModal();
-    Swal.fire({
+  // Código para limpiar el formulario
+  limpiarCerrarModal();
+  Swal.fire({
       position: "top-end",
       icon: "success",
       title: "¡Expediente creado correctamente!",
       showConfirmButton: false,
-      timer: 4000
+      timer: 3000
+  }).then(() => {
+    // Recargar la página después de cerrar la alerta
+    location.reload();
   });
+  
 });
 
 
@@ -143,37 +159,53 @@ function limpiarCerrarModal(){
 
 document.getElementById("folio").addEventListener("input", function() {
     var input = this.value;
+    var folioFeedback = document.getElementById("folio-feedback");
+
+    // Verifica que el elemento con ID "folio-feedback" exista
+    if (!folioFeedback) {
+        console.error("Elemento con ID 'folio-feedback' no encontrado en el HTML.");
+        return;
+    }
 
     // Verifica la longitud del valor ingresado
     if (input.length === 6) {
-      // Si es válido, elimina la clase is-invalid y agrega la clase is-valid
-      this.classList.remove("is-invalid");
-      this.classList.add("is-valid");
-      document.getElementById("folio-feedback").style.display = "none";
+        // Si es válido, elimina la clase is-invalid y agrega la clase is-valid
+        this.classList.remove("is-invalid");
+        this.classList.add("is-valid");
+        folioFeedback.style.display = "none";
     } else {
-      // Si no es válido, agrega la clase is-invalid y elimina la clase is-valid
-      this.classList.remove("is-valid");
-      this.classList.add("is-invalid");
-      document.getElementById("folio-feedback").style.display = "block";
+        // Si no es válido, agrega la clase is-invalid y elimina la clase is-valid
+        this.classList.remove("is-valid");
+        this.classList.add("is-invalid");
+        folioFeedback.style.display = "block";
     }
 });
+
 
 document.getElementById("curp").addEventListener("input", function() {
     var input = this.value;
+    var curpFeedback = document.getElementById("curp-feedback");
+
+    // Verifica que el elemento con ID "curp-feedback" exista
+    if (!curpFeedback) {
+        console.error("Elemento con ID 'curp-feedback' no encontrado en el HTML.");
+        return;
+    }
 
     // Verifica la longitud del valor ingresado
     if (input.length === 0 || (input.length >= 1 && input.length === 18)) {
-      // Si es válido, elimina la clase is-invalid y agrega la clase is-valid
-      this.classList.remove("is-invalid");
-      this.classList.add("is-valid");
-      document.getElementById("curp-feedback").style.display = "none";
+        // Si es válido, elimina la clase is-invalid y agrega la clase is-valid
+        this.classList.remove("is-invalid");
+        this.classList.add("is-valid");
+        curpFeedback.style.display = "none";
     } else {
-      // Si no es válido, agrega la clase is-invalid y elimina la clase is-valid
-      this.classList.remove("is-valid");
-      this.classList.add("is-invalid");
-      document.getElementById("curp-feedback").style.display = "block";
+        // Si no es válido, agrega la clase is-invalid y elimina la clase is-valid
+        this.classList.remove("is-valid");
+        this.classList.add("is-invalid");
+        curpFeedback.style.display = "block";
     }
 });
+
 
 document.getElementById("formAgregarExp").addEventListener("submit", function() {
     var inputs = document.querySelectorAll('input[type="text"], input[type="date"]');
