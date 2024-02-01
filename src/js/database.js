@@ -1,6 +1,6 @@
 const mysql = require('mysql2/promise')
 
-/*
+
 const connection = mysql.createConnection({
     host:'localhost',
     user:'root',
@@ -8,9 +8,9 @@ const connection = mysql.createConnection({
     database:'db_expediente',
     port: 3306
 })
-*/
 
 
+/*
 const connection = mysql.createConnection({
     host:'localhost',
     user:'root',
@@ -18,7 +18,7 @@ const connection = mysql.createConnection({
     database:'db_expediente',
     port: 3306
 })
-
+*/
 
 function getConnection(){
     return connection;

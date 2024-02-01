@@ -197,6 +197,8 @@ function limpiarCerrarModal(){
     $('#modalAgregar').modal('hide');
 }
 
+//validaciones de la curp y folio
+
 document.getElementById("folio").addEventListener("input", function() {
     var input = this.value;
     var folioFeedback = document.getElementById("folio-feedback");
@@ -245,6 +247,36 @@ document.getElementById("curp").addEventListener("input", function() {
         curpFeedback.style.display = "block";
     }
 });
+
+document.getElementById("modalActualizar").addEventListener("input", function(event) {
+    var targetElement = event.target;
+    var curpFeedback = document.getElementById("curp-feedback");
+    var folioFeedback = document.getElementById("folio-feedback");
+
+    if (targetElement.id === "folio") {
+        validateInputLength(targetElement, folioFeedback, 6);
+    } else if (targetElement.id === "curp") {
+        validateInputLength(targetElement, curpFeedback, 18);
+    }
+});
+
+function validateInputLength(inputElement, feedbackElement, expectedLength) {
+    var input = inputElement.value;
+
+    // Verifica la longitud del valor ingresado
+    if (input.length === 0 || (input.length >= 1 && input.length === expectedLength)) {
+        // Si es válido, elimina la clase is-invalid y agrega la clase is-valid
+        inputElement.classList.remove("is-invalid");
+        inputElement.classList.add("is-valid");
+        feedbackElement.style.display = "none";
+    } else {
+        // Si no es válido, agrega la clase is-invalid y elimina la clase is-valid
+        inputElement.classList.remove("is-valid");
+        inputElement.classList.add("is-invalid");
+        feedbackElement.style.display = "block";
+    }
+}
+
 
 document.getElementById("formAgregarExp").addEventListener("submit", function() {
     var inputs = document.querySelectorAll('input[type="text"], input[type="date"]');
