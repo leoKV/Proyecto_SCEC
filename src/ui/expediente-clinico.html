@@ -269,7 +269,10 @@
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="folio" class="form-label">No.Folio</label>
-                      <input type="text" class="form-control" id="folio" placeholder="Escribe el No.Folio de expediente">
+                      <input type="text" class="form-control is-invalid"  id="folio" maxlength="6" minlength="6" placeholder="Escribe el No.Folio de expediente" required style="text-transform: uppercase;" >
+                      <div id="folio-feedback" class="invalid-feedback">
+                        Por favor, escribe de manera correcta el número de folio.
+                      </div> 
                     </div>
                   </div>
 
@@ -297,21 +300,49 @@
                   </div>
                 </div>
 
+                  <!--
+                          <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="afiliacion" class="form-label">Afiliación</label>
+                      <select class="form-select" id="afiliacion" name="tarjeta">
+                        <option selected value="NINGUNO">¿Cuenta con alguna afiliación?</option>
+                        <option value="NINGUNA">NINGUNA</option>
+                        <option value="ISSSTE">ISSSTE</option>
+                        <option value="IMSS">IMSS</option>
+                        <option value="OTRO">OTRO</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="numAfiliacion" class="form-label">No.Afiliación</label>
+                      <input type="text" class="form-control" id="numAfiliacion" placeholder="Escribe el número de afiliación"  style="text-transform: uppercase;">
+                    </div>
+                  </div>
+                </div>
+                -->
+
                 <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="curp" class="form-label">CURP</label>
-                      <input type="text" class="form-control" id="curp" placeholder="Escribe la CURP">
+                      <input type="text" class="form-control is-valid" id="curp" placeholder="Escribe la CURP"  minlength="18" maxlength="18"  style="text-transform: uppercase;">
+                      <div id="curp-feedback" class="invalid-feedback">
+                        Por favor, escribe la curp de manera completa.
+                      </div> 
                     </div>
                   </div>
+
 
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="tarjeta" class="form-label">Tarjeta</label>
                       <select class="form-select" id="tarjeta" name="tarjeta">
                         <option selected>¿Cuenta con tarjeta?</option>
-                        <option value="SI">Si</option>
-                        <option value="NO">No</option>
+                        <option value="SI">SI</option>
+                        <option value="NO">NO</option>
                       </select>
                     </div>
                   </div>
@@ -324,8 +355,8 @@
                       <label for="reposicionTarjeta" class="form-label">Reposición de Tarjeta</label>
                       <select class="form-select" id="reposicionTarjeta" name="reposicionTarjeta">
                         <option selected>¿Cuenta con reposición de tarjeta?</option>
-                        <option value="SI">Si</option>
-                        <option value="NO">No</option>
+                        <option value="SI">SI</option>
+                        <option value="NO">NO</option>
                       </select>
                     </div>
                   </div>
@@ -348,9 +379,9 @@
                 </div>
 
                 <div class="modal-footer">
-                  <button class="btn btn-info"><i class="fa fa-eraser"></i> Limpiar</button>
+                  <button type="reset" class="btn btn-info"><i class="fa fa-eraser"></i> Limpiar</button>
                   <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Guardar</button>
-              </div>
+                </div>
               </form>
             </div>
           </div>
@@ -372,7 +403,7 @@
 
             <div class="modal-footer">
               <button class="btn btn-danger" data-bs-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
-              <button type="submit" class="btn btn-success" data-bs-dismiss="modal"><i class="fa-solid fa-circle-check"></i> Aceptar</button>
+              <button type="button" class="btn btn-success btn-confirmar-eliminar" data-bs-dismiss="modal" data-id-eliminar="${expediente.id}"><i class="fa-solid fa-circle-check"></i> Aceptar</button>
             </div>
           </div>
         </div>
@@ -420,8 +451,6 @@
       </div>
     </div>
     <!--===========================Sección de Scripts de la página===============================================================================================-->
-
-
     <!-- Incluyendo jQuery-->
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <!-- Incluyendo Ajax-->
@@ -436,7 +465,9 @@
     <script src="../../node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
     <!--Incluyendo Script de font-awesome-->
     <script src="../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+    <!--Incluyendo Script de SweetAlert-->
     <script src="../../node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <!--Incluyendo Script de Moment-->
     <script src="../../node_modules/moment/min/moment.min.js"></script>
 </body>
 </html>

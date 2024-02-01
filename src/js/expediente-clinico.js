@@ -1,3 +1,4 @@
+// expediente.js
 window.onload = function(){
     var menuInicio = document.getElementById('expediente-clinico');
     menuInicio.style.color='white';
@@ -9,12 +10,10 @@ window.onload = function(){
     menuInicio.style.border = '1px solid white';
 }
 
-// expediente.js
-
-
 const { remote } = window.electronAPI;
 
 $(document).ready(function() {
+  var idExpedienteToDelete;
   $('#mydatatable tfoot th').each( function () {
       var title = $(this).text();
       $(this).html( '<input type="text" placeholder="Filtrar.." />' );
@@ -42,14 +41,13 @@ $(document).ready(function() {
                 }else{
                     var fechaNacimientoFormateada = expediente.fechaNacimiento;
                 }
-                
                 var opcionesHTML = `
-                    <button type="button" id="btnActualizarExp" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalActualizar">
-                        <i class="fa-solid fa-pen-to-square"></i> Actualizar
-                    </button>
-                    <button type="button" id="btnEliminarExp" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalEliminar">
-                        <i class="fa fa-trash"></i> Eliminar
-                    </button>
+                <button type="button" class="btn btn-secondary btnActualizarExp" data-bs-toggle="modal" data-bs-target="#modalActualizar">
+                    <i class="fa-solid fa-pen-to-square"></i> Actualizar
+                </button>
+                <button type="button" class="btn btn-danger btnEliminarExp" data-bs-toggle="modal" data-bs-target="#modalEliminar" data-id="${expediente.id}">
+                    <i class="fa fa-trash"></i> Eliminar
+                </button>
                 `;
                 table.row.add([
                     expediente.folio,
@@ -64,6 +62,50 @@ $(document).ready(function() {
                     expediente.ciudad,
                     opcionesHTML
                 ]).draw();
+            });
+
+            /*
+            $('.btnEliminarExp').on('click', function () {
+                idExpedienteToDelete = $(this).data('id');
+                console.log('Id al abrir modal: ', idExpedienteToDelete);
+                $('.btn-confirmar-eliminar').attr('data-id-eliminar', idExpedienteToDelete);
+            });
+            */
+            $('#expedientes-tbody').on('click', '.btnEliminarExp', function () {
+                idExpedienteToDelete = $(this).data('id');
+                console.log('Id al abrir modal: ', idExpedienteToDelete);
+                $('.btn-confirmar-eliminar').attr('data-id-eliminar', idExpedienteToDelete);
+            });
+
+            $('.btn-confirmar-eliminar').on('click', function () {
+                idExpediente = idExpedienteToDelete
+                console.log('Id al confirmar eliminar: ', idExpediente);
+                window.electronAPI.deleteExp(idExpediente);
+            });
+
+            window.electronAPI.listenExpDeletedSuccessfully(() => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "¡Expediente eliminado correctamente!",
+                    showConfirmButton: false,
+                    timer: 3000
+                }).then(() => {
+                  // Recargar la página después de cerrar la alerta
+                  location.reload();
+                });
+                
+            });
+              
+            window.electronAPI.listenExpDeleteError(() => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: 'error',
+                    title: '¡Error al eliminar expediente!',
+                    text: `Ocurrio un error, intentalo más tarde.`,
+                    showConfirmButton: false,
+                    timer: 4500
+                });
             });
 
             table.columns().every(function () {
@@ -137,7 +179,6 @@ window.electronAPI.listenExpInsertedSuccessfully(() => {
   
 });
 
-
 window.electronAPI.listenExpInsertError(() => {
   // Código para limpiar el formulario
   limpiarCerrarModal();
@@ -150,7 +191,6 @@ window.electronAPI.listenExpInsertError(() => {
       timer: 4500
   });
 });
-
 
 function limpiarCerrarModal(){
     document.getElementById('formAgregarExp').reset()
@@ -206,7 +246,6 @@ document.getElementById("curp").addEventListener("input", function() {
     }
 });
 
-
 document.getElementById("formAgregarExp").addEventListener("submit", function() {
     var inputs = document.querySelectorAll('input[type="text"], input[type="date"]');
     
@@ -214,4 +253,5 @@ document.getElementById("formAgregarExp").addEventListener("submit", function() 
       input.value = input.value.toUpperCase();
     });
 });
+
 

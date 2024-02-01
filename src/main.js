@@ -21,11 +21,10 @@ function createWindow() {
 
 
 // Modifica la función para obtener expedientes
-
 ipcMain.on('getExpedientes', async (event) => {
     try {
         const conn = await getConnection();
-        const result = await conn.query('SELECT folio,nombre,edad,direccion,curp,fechaIngreso,tarjeta,reposicionTarjeta,fechaNacimiento,ciudad FROM expediente');
+        const result = await conn.query('SELECT * FROM expediente');
         event.reply('receiveExpedientes', result[0]);
     } catch (error) {
         console.log(error);
@@ -70,6 +69,28 @@ async function createExp(expediente){
 ipcMain.on('createExp', async (event, expediente) => {
     try {
         await createExp(expediente);
+    } catch (error) {
+        console.log(error);
+    }
+});
+//Funciones de actualización de expedientes
+
+//Funciones del eliminación de expedientes
+async function deleteExp(idExpediente){
+    try{
+        const conn = await getConnection();
+        const result = await conn.query('DELETE FROM expediente WHERE id = ? ', idExpediente)
+        console.log(result)
+        mainWindow.webContents.send('expDeletedSuccessfully');
+    }catch(error){
+        console.log(error)
+        mainWindow.webContents.send('expDeleteError');
+    }
+}
+
+ipcMain.on('deleteExp', async (event, idExpediente) => {
+    try {
+        await deleteExp(idExpediente)
     } catch (error) {
         console.log(error);
     }
