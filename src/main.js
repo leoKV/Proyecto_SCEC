@@ -20,7 +20,7 @@ function createWindow() {
 }
 
 
-// Modifica la función para obtener expedientes
+//Función para listar todos los expedintes
 ipcMain.on('getExpedientes', async (event) => {
     try {
         const conn = await getConnection();
@@ -29,6 +29,25 @@ ipcMain.on('getExpedientes', async (event) => {
     } catch (error) {
         console.log(error);
         event.reply('receiveExpedientes', []);
+    }
+});
+
+// Agrega una nueva función para obtener un expediente por su ID
+ipcMain.on('getExpedienteById', async (event, idExpediente) => {
+    try {
+        const conn = await getConnection();
+        const result = await conn.query('SELECT * FROM expediente WHERE id = ?', [idExpediente]);
+        
+        // Si el resultado tiene al menos un expediente, devuélvelo
+        if (result[0].length > 0) {
+            event.reply('receiveExpedienteById', result[0][0]);
+        } else {
+            // Si no se encuentra ningún expediente con ese ID
+            event.reply('receiveExpedienteById', null);
+        }
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveExpedienteById', null);
     }
 });
 
@@ -74,12 +93,34 @@ ipcMain.on('createExp', async (event, expediente) => {
     }
 });
 //Funciones de actualización de expedientes
+async function updateExp(expediente) {
+    try {
+        const conn = await getConnection();
 
+        // Realizar la actualización en la base de datos
+        const result = await conn.query('UPDATE expediente SET ? WHERE id = ?', [expediente, expediente.id]);
+
+        console.log(result);
+        // Enviar el evento si la actualización es exitosa
+        mainWindow.webContents.send('expUpdatedSuccessfully');
+    } catch (error) {
+        console.log(error);
+        mainWindow.webContents.send('expUpdateError');
+    }
+}
+
+ipcMain.on('updateExp', async (event, expediente) => {
+    try {
+        await updateExp(expediente);
+    } catch (error) {
+        console.log(error);
+    }
+});
 //Funciones del eliminación de expedientes
-async function deleteExp(idExpediente){
+async function deleteExp(idExpedienteD){
     try{
         const conn = await getConnection();
-        const result = await conn.query('DELETE FROM expediente WHERE id = ? ', idExpediente)
+        const result = await conn.query('DELETE FROM expediente WHERE id = ? ', idExpedienteD)
         console.log(result)
         mainWindow.webContents.send('expDeletedSuccessfully');
     }catch(error){
@@ -88,9 +129,9 @@ async function deleteExp(idExpediente){
     }
 }
 
-ipcMain.on('deleteExp', async (event, idExpediente) => {
+ipcMain.on('deleteExp', async (event, idExpedienteD) => {
     try {
-        await deleteExp(idExpediente)
+        await deleteExp(idExpedienteD)
     } catch (error) {
         console.log(error);
     }

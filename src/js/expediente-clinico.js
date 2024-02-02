@@ -13,7 +13,7 @@ window.onload = function(){
 const { remote } = window.electronAPI;
 
 $(document).ready(function() {
-  var idExpedienteToDelete;
+  var idExpediente;
   $('#mydatatable tfoot th').each( function () {
       var title = $(this).text();
       $(this).html( '<input type="text" placeholder="Filtrar.." />' );
@@ -42,7 +42,7 @@ $(document).ready(function() {
                     var fechaNacimientoFormateada = expediente.fechaNacimiento;
                 }
                 var opcionesHTML = `
-                <button type="button" class="btn btn-secondary btnActualizarExp" data-bs-toggle="modal" data-bs-target="#modalActualizar">
+                <button type="button" class="btn btn-secondary btnActualizarExp" data-bs-toggle="modal" data-bs-target="#modalActualizar" data-id="${expediente.id}">
                     <i class="fa-solid fa-pen-to-square"></i> Actualizar
                 </button>
                 <button type="button" class="btn btn-danger btnEliminarExp" data-bs-toggle="modal" data-bs-target="#modalEliminar" data-id="${expediente.id}">
@@ -64,23 +64,81 @@ $(document).ready(function() {
                 ]).draw();
             });
 
-            /*
-            $('.btnEliminarExp').on('click', function () {
-                idExpedienteToDelete = $(this).data('id');
-                console.log('Id al abrir modal: ', idExpedienteToDelete);
-                $('.btn-confirmar-eliminar').attr('data-id-eliminar', idExpedienteToDelete);
+            //Actualización
+            const formActualizar = document.getElementById('formActualizarExp')
+            $('#expedientes-tbody').on('click', '.btnActualizarExp', function () {
+                idExpediente = $(this).data('id');
+                console.log('ID del expediente a actualizar',idExpediente);
+                // Llamar a la función para obtener los detalles del expediente por su ID
+                window.electronAPI.sendGetExpedienteById(idExpediente);
             });
-            */
+
+            // Agregar un listener para recibir los detalles del expediente por su ID
+            window.electronAPI.receiveExpedienteById((expediente) => {
+                console.log(expediente)
+                if (expediente) {
+                    // Rellenar el formulario con los datos del expediente
+                    $('#folioU').val(expediente.folio); 
+                    $('#nombreU').val(expediente.nombre);
+                    $('#edadU').val(expediente.edad);
+                    $('#direccionU').val(expediente.direccion);
+                    $('#curpU').val(expediente.curp);
+                    $('#tarjetaU').val(expediente.tarjeta);
+                    $('#reposicionTarjetaU').val(expediente.reposicionTarjeta);
+                    // Formatear la fecha utilizando moment.js
+                    const fechaNacimientoFormateada = moment(expediente.fechaNacimiento).format('YYYY-MM-DD');
+                    $('#fechaNacimientoU').val(fechaNacimientoFormateada);
+                    $('#ciudadU').val(expediente.ciudad);
+
+                    formActualizar.addEventListener('submit', (e) =>{
+                        e.preventDefault();
+                        window.electronAPI.updateExp(expediente);
+                        $('#modalActualizar').modal('hide');
+                    })
+                    
+                } else {
+                    console.error('No se encontró un expediente con el ID proporcionado.');
+                }
+            });
+
+            window.electronAPI.listenExpUpdatedSuccessfully(() => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "¡Expediente actualizado correctamente!",
+                    showConfirmButton: false,
+                    timer: 3000
+                }).then(() => {
+                  // Recargar la página después de cerrar la alerta
+                  location.reload();
+                });
+                
+            });
+              
+            window.electronAPI.listenExpUpdateError(() => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: 'error',
+                    title: '¡Error al actualizar expediente!',
+                    text: `Ocurrio un error, intentalo más tarde.`,
+                    showConfirmButton: false,
+                    timer: 4500
+                });
+            });
+
+    
+
+            //Eliminación
             $('#expedientes-tbody').on('click', '.btnEliminarExp', function () {
-                idExpedienteToDelete = $(this).data('id');
-                console.log('Id al abrir modal: ', idExpedienteToDelete);
-                $('.btn-confirmar-eliminar').attr('data-id-eliminar', idExpedienteToDelete);
+                idExpediente = $(this).data('id');
+                console.log('Id al abrir modal eliminar: ', idExpediente);
+                $('.btn-confirmar-eliminar').attr('data-id-eliminar', idExpediente);
             });
 
             $('.btn-confirmar-eliminar').on('click', function () {
-                idExpediente = idExpedienteToDelete
-                console.log('Id al confirmar eliminar: ', idExpediente);
-                window.electronAPI.deleteExp(idExpediente);
+                idExpedienteD = idExpediente
+                console.log('Id al confirmar eliminar: ', idExpedienteD);
+                window.electronAPI.deleteExp(idExpedienteD);
             });
 
             window.electronAPI.listenExpDeletedSuccessfully(() => {
@@ -253,9 +311,9 @@ document.getElementById("modalActualizar").addEventListener("input", function(ev
     var curpFeedback = document.getElementById("curp-feedback");
     var folioFeedback = document.getElementById("folio-feedback");
 
-    if (targetElement.id === "folio") {
+    if (targetElement.id === "folioU") {
         validateInputLength(targetElement, folioFeedback, 6);
-    } else if (targetElement.id === "curp") {
+    } else if (targetElement.id === "curpU") {
         validateInputLength(targetElement, curpFeedback, 18);
     }
 });
