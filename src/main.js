@@ -96,6 +96,19 @@ ipcMain.on('createExp', async (event, expediente) => {
 async function updateExp(expediente) {
     try {
         const conn = await getConnection();
+        // Validación de nulos
+        Object.keys(expediente).forEach((key) => {
+            if (expediente[key] === '') {
+                expediente[key] = null;
+            }else if (typeof expediente[key] === 'string') { // Verificar si es una cadena de texto
+                expediente[key] = expediente[key].toUpperCase();
+            }
+        });
+
+        if (expediente.fechaNacimiento !== null) {
+            const fechaNacimiento = new Date(expediente.fechaNacimiento);
+            expediente.fechaNacimiento = fechaNacimiento.toISOString().split('T')[0];
+        }
 
         // Realizar la actualización en la base de datos
         const result = await conn.query('UPDATE expediente SET ? WHERE id = ?', [expediente, expediente.id]);

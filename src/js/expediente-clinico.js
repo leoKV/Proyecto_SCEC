@@ -92,7 +92,20 @@ $(document).ready(function() {
 
                     formActualizar.addEventListener('submit', (e) =>{
                         e.preventDefault();
-                        window.electronAPI.updateExp(expediente);
+                        // Obtener los datos del formulario y crear un objeto expediente actualizado
+                        const expedienteActualizado = {
+                            id: idExpediente,
+                            folio: $('#folioU').val(),
+                            nombre: $('#nombreU').val(),
+                            edad: $('#edadU').val(),
+                            direccion: $('#direccionU').val(),
+                            curp: $('#curpU').val(),
+                            tarjeta: $('#tarjetaU').val(),
+                            reposicionTarjeta: $('#reposicionTarjetaU').val(),
+                            fechaNacimiento: $('#fechaNacimientoU').val(),
+                            ciudad: $('#ciudadU').val()
+                        };
+                        window.electronAPI.updateExp(expedienteActualizado);
                         $('#modalActualizar').modal('hide');
                     })
                     
@@ -101,6 +114,7 @@ $(document).ready(function() {
                 }
             });
 
+            //Alertas de Actualización.
             window.electronAPI.listenExpUpdatedSuccessfully(() => {
                 Swal.fire({
                     position: "top-end",
@@ -120,13 +134,11 @@ $(document).ready(function() {
                     position: "top-end",
                     icon: 'error',
                     title: '¡Error al actualizar expediente!',
-                    text: `Ocurrio un error, intentalo más tarde.`,
+                    text: `Verifica que el No.Folio no se repita al actualizar.`,
                     showConfirmButton: false,
                     timer: 4500
                 });
             });
-
-    
 
             //Eliminación
             $('#expedientes-tbody').on('click', '.btnEliminarExp', function () {
