@@ -198,6 +198,16 @@ $(document).ready(function() {
         });
     }
   });
+  //Funcionamiento de filtros de búsqueda.
+  // Configurar eventos de búsqueda para cada input de búsqueda en el pie de la tabla
+    $('#mydatatable tfoot input').on('keyup input', function () {
+        // Obtener el índice de la columna
+        var columnIndex = $(this).parent().index();
+        
+        // Ejecutar la búsqueda en esa columna
+        table.column(columnIndex).search(this.value).draw();
+    });
+
 });
 
 //Capturando valores del formulario
