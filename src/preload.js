@@ -17,6 +17,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   receiveExpedientes: (callback) => {
     ipcRenderer.on('receiveExpedientes', (event, expedientes) => callback(expedientes));
   },
+  //Funciones para listar expedientes expedientes por depurar.
+  sendGetExpedientesDepurar: () => ipcRenderer.send('getExpedientesDepurar'),
+  receiveExpedientesDepurar: (callback) => {
+      ipcRenderer.on('receiveExpedientesDepurar', (event, expedientes) => callback(expedientes));
+  },
   //Funciones para actualizar
   sendGetExpedienteById: (idExpediente) => ipcRenderer.send('getExpedienteById', idExpediente),
   receiveExpedienteById: (callback) => {

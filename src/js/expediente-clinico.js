@@ -16,7 +16,7 @@ $(document).ready(function() {
   var idExpediente;
   $('#mydatatable tfoot th').each( function () {
       var title = $(this).text();
-      $(this).html( '<input type="text" placeholder="Filtrar.." />' );
+      $(this).html( '<input type="text" placeholder="Filtrar.." style="text-transform: uppercase;"/>' );
   } );
 
   var table = $('#mydatatable').DataTable({
@@ -208,7 +208,107 @@ $(document).ready(function() {
         table.column(columnIndex).search(this.value).draw();
     });
 
+    // Configurar evento de cambio para el filtro de folio
+    $('#filtroFolio').on('change', function () {
+        var filtro = $(this).val().trim(); // Obtener el valor seleccionado y eliminar espacios en blanco
+        // Aplicar el filtro a la columna del folio
+        table.column(0).search(filtro).draw(); // Suponiendo que la columna del folio es la primera (índice 0)
+    });
+
+    // Configurar evento de cambio para el filtro de nombre
+    $('#filtroNombre').on('change', function () {
+        var filtro = $(this).val().trim(); // Obtener el valor seleccionado y eliminar espacios en blanco
+        // Aplicar el filtro a la columna del nombre
+        table.column(1).search('^' + filtro, true, false).draw(); // Filtrar registros cuya primera letra coincida con la letra seleccionada
+    });
+
+    // Configurar evento de cambio para el filtro de CURP
+    $('#filtroCurp').on('change', function () {
+        var filtro = $(this).val().trim(); // Obtener el valor seleccionado y eliminar espacios en blanco
+        // Aplicar el filtro a la columna de la CURP
+        table.column(4).search('^' + filtro, true, false).draw(); // Filtrar registros cuya primera letra coincida con el caracter seleccionado
+    });
+
 });
+
+$(document).ready(function() {
+    var tableDepurar = null; // Declarar la variable fuera de la función para poder acceder a ella en el callback
+
+    // Inicializar DataTables cuando se abra el modal
+    $('#modalDepurar').on('shown.bs.modal', function () {
+        // Destruir la instancia existente de DataTables si existe
+        if (tableDepurar !== null) {
+            tableDepurar.destroy();
+            tableDepurar = null;
+        }
+
+        // Inicializar DataTables
+        tableDepurar = $('#mydatatableDepurar').DataTable({
+            "dom": 'B<"float-left"i><"float-right"f>t<"float-left"l><"float-right"p><"clearfix">',
+            "responsive": false,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+            },
+            "order": [[ 0, "desc" ]],
+            "columnDefs": [
+                {
+                    "targets": 5, // Índice de la columna fechaIngreso (empezando desde 0)
+                    "render": function (data, type, row, meta) {
+                        // Aplicar estilo personalizado a las celdas de la columna fechaIngreso
+                        return '<div style="background-color:#d63031; color: white;">' + data + '</div>';
+                    }
+                }
+            ]
+        });
+
+        // Solicitar expedientes al cargar la página
+        electronAPI.sendGetExpedientesDepurar();
+        electronAPI.receiveExpedientesDepurar((expedientes) => {
+            tableDepurar.clear();
+
+            expedientes.forEach(expediente => {
+                // Formatear las fechas antes de agregarlas a la tabla
+                var fechaIngresoFormateada = moment(expediente.fechaIngreso).format('DD/MM/YYYY');
+                var fechaNacimientoFormateada = expediente.fechaNacimiento ? moment(expediente.fechaNacimiento).format('DD/MM/YYYY') : null;
+
+                tableDepurar.row.add([
+                    expediente.folio,
+                    expediente.nombre,
+                    expediente.edad,
+                    expediente.direccion,
+                    expediente.curp,
+                    fechaIngresoFormateada,
+                    expediente.tarjeta,
+                    expediente.reposicionTarjeta,
+                    fechaNacimientoFormateada,
+                    expediente.ciudad
+                ]).draw();
+            });
+        });
+
+        tableDepurar.columns().every(function () {
+            var that = this;
+
+            $('input', this.footer()).on('focus', function () {
+                // Desactivar eventos de búsqueda
+                that.off('keyup change');
+            }).on('blur', function () {
+                // Volver a activar eventos de búsqueda
+                that.on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+    });
+});
+
+
+
+
 
 //Capturando valores del formulario
 const formAgregar = document.getElementById('formAgregarExp')

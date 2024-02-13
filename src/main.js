@@ -51,6 +51,18 @@ ipcMain.on('getExpedienteById', async (event, idExpediente) => {
     }
 });
 
+//Función para listar todos los expedintes
+ipcMain.on('getExpedientesDepurar', async (event) => {
+    try {
+        const conn = await getConnection();
+        const result = await conn.query('SELECT * FROM expediente WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR) ');
+        event.reply('receiveExpedientesDepurar', result[0]);
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveExpedientesDepurar', []);
+    }
+});
+
 
 //Función para crear nuevos expedientes clínicos
 async function createExp(expediente){

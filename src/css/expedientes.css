@@ -73,3 +73,20 @@ h1#exp{
     display: table-header-group !important;
 }
 
+/* CSS personalizado */
+.modal-super .modal-dialog {
+    width: 100%; /* Ancho personalizado del modal */
+    max-width: 100%; /* Ancho máximo personalizado */
+    margin: auto; /* Centrar el modal horizontalmente */
+}
+
+@media (min-width: 1400px) {
+    .modal-super .modal-dialog {
+        max-width: 1880px; /* Ancho máximo personalizado para dispositivos grandes */
+    }
+}
+
+.Fyear{
+    background-color:#d63031;
+    color: white;
+}
