@@ -51,7 +51,7 @@ ipcMain.on('getExpedienteById', async (event, idExpediente) => {
     }
 });
 
-//Función para listar todos los expedintes
+//Función para listar todos los expedintes que se deben depurar
 ipcMain.on('getExpedientesDepurar', async (event) => {
     try {
         const conn = await getConnection();
@@ -62,6 +62,8 @@ ipcMain.on('getExpedientesDepurar', async (event) => {
         event.reply('receiveExpedientesDepurar', []);
     }
 });
+
+
 
 
 //Función para crear nuevos expedientes clínicos
@@ -161,6 +163,28 @@ ipcMain.on('deleteExp', async (event, idExpedienteD) => {
         console.log(error);
     }
 });
+
+//Funciones del depuración de expedientes
+async function depurarExp(){
+    try{
+        const conn = await getConnection();
+        const result = await conn.query('DELETE FROM expediente WHERE id IN (SELECT id FROM (SELECT * FROM expediente)AS e WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)) ')
+        console.log(result)
+        mainWindow.webContents.send('expDepuradoSuccessfully');
+    }catch(error){
+        console.log(error)
+        mainWindow.webContents.send('expDepuradoError');
+    }
+}
+
+ipcMain.on('depurarExp', async (event) => {
+    try {
+        await depurarExp()
+    } catch (error) {
+        console.log(error);
+    }
+});
+
   
 module.exports = {
     createWindow,

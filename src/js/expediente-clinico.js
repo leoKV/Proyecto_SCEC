@@ -284,6 +284,13 @@ $(document).ready(function() {
                     expediente.ciudad
                 ]).draw();
             });
+            if (tableDepurar.data().any()) {
+                // Si hay registros, mostrar el botón de depurar
+                $('#btnDepurarExpedintes').show();
+            } else {
+                // Si no hay registros, ocultar el botón de depurar
+                $('#btnDepurarExpedintes').hide();
+            }
         });
 
         tableDepurar.columns().every(function () {
@@ -306,9 +313,35 @@ $(document).ready(function() {
     });
 });
 
+//Función de depuración de archivo.
+$('.btn-confirmar-depurar').on('click', function () {
+    window.electronAPI.depurarExp()
+});
 
-
-
+window.electronAPI.listenExpDepuradoSuccessfully(() => {
+    Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "¡Expedientes depurados correctamente!",
+        showConfirmButton: false,
+        timer: 3000
+    }).then(() => {
+      // Recargar la página después de cerrar la alerta
+      location.reload();
+    });
+    
+});
+  
+window.electronAPI.listenExpDepuradoError(() => {
+    Swal.fire({
+        position: "top-end",
+        icon: 'error',
+        title: '¡Error al depurar los expediente!',
+        text: `Ocurrio un error, intentalo más tarde.`,
+        showConfirmButton: false,
+        timer: 4500
+    });
+});
 
 //Capturando valores del formulario
 const formAgregar = document.getElementById('formAgregarExp')
