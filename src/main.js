@@ -32,6 +32,18 @@ ipcMain.on('getExpedientes', async (event) => {
     }
 });
 
+//Función para listar todos los números de folio disponibles para insertar nuevos expedientes
+ipcMain.on('getFoliosDisponibles', async (event) => {
+    try {
+        const conn = await getConnection();
+        const result = await conn.query('SELECT * FROM folioDisponible');
+        event.reply('receiveFolios', result[0]);
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveFolios', []);
+    }
+});
+
 // Agrega una nueva función para obtener un expediente por su ID
 ipcMain.on('getExpedienteById', async (event, idExpediente) => {
     try {

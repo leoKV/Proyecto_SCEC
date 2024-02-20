@@ -12,10 +12,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listenExpInsertError: (callback) => {
     ipcRenderer.on('expInsertError', callback);
   },
-  //Funciones para listar expedientes expedientes.
+  //Funciones para listar expedientes.
   sendGetExpedientes: () => ipcRenderer.send('getExpedientes'),
   receiveExpedientes: (callback) => {
     ipcRenderer.on('receiveExpedientes', (event, expedientes) => callback(expedientes));
+  },
+  //Funciones para listar folios disponibles.
+  sendGetFolios: () => ipcRenderer.send('getFoliosDisponibles'),
+  receiveFolios: (callback) => {
+      ipcRenderer.on('receiveFolios', (event, folios) => callback(folios));
   },
   //Funciones para listar expedientes expedientes por depurar.
   sendGetExpedientesDepurar: () => ipcRenderer.send('getExpedientesDepurar'),

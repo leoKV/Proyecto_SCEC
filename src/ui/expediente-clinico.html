@@ -133,6 +133,18 @@
                     <th style="vertical-align:top;">Edad</th>
                     <th style="vertical-align:top;">Dirección</th>
                     <th style="vertical-align:top;">
+                      Afiliación
+                      <br>
+                      <select id="filtroAfiliacion" class="form-select">
+                        <option value="">Todas</option>
+                        <option value="NINGUNA">NINGUNA</option>
+                        <option value="ISSSTE">ISSSTE</option>
+                        <option value="IMSS">IMSS</option>
+                        <option value="OTRO">OTRO</option>
+                    </select>
+                    </th>
+                    <th style="vertical-align:top;">No.Afiliación</th>
+                    <th style="vertical-align:top;">
                       CURP
                       <br>
                       <select id="filtroCurp" class="form-select">
@@ -185,9 +197,60 @@
                       <th>Filter..</th>
                       <th>Filter..</th>
                       <th>Filter..</th>
+                      <th>Filter..</th>
+                      <th>Filter..</th>
                   </tr>
               </tfoot>
               <tbody id="expedientes-tbody">
+              </tbody>
+          </table>
+        </div>
+
+        <h1 id="exp">Números de Folio Disponibles</h1>
+        <div class="table-responsive" id="tablaFoliosD-container">
+          <table class="records_list table table-striped table-bordered table-hover" id="mydatatableFolios">
+              <thead class="table-dark">
+                  <tr>
+                    <th style="vertical-align:top;">
+                      No.Folio
+                      <br>
+                      <select id="filtroFolioDisponible" class="form-select">
+                          <option value="">Todas</option>
+                          <option value="A">A</option>
+                          <option value="B">B</option>
+                          <option value="C">C</option>
+                          <option value="D">D</option>
+                          <option value="E">E</option>
+                          <option value="F">F</option>
+                          <option value="G">G</option>
+                          <option value="H">H</option>
+                          <option value="I">I</option>
+                          <option value="J">J</option>
+                          <option value="K">K</option>
+                          <option value="L">L</option>
+                          <option value="M">M</option>
+                          <option value="N">N</option>
+                          <option value="Ñ">Ñ</option>
+                          <option value="O">O</option>
+                          <option value="P">P</option>
+                          <option value="Q">Q</option>
+                          <option value="R">R</option>
+                          <option value="S">S</option>
+                          <option value="T">T</option>
+                          <option value="U">U</option>
+                          <option value="V">V</option>
+                          <option value="W">W</option>
+                          <option value="Y">Y</option>
+                          <option value="Z">Z</option>
+                      </select>
+                  </tr>
+              </thead>
+              <tfoot>
+                  <tr>
+                      <th>Filter..</th>
+                  </tr>
+              </tfoot>
+              <tbody id="folios-tbody">
               </tbody>
           </table>
         </div>
@@ -230,7 +293,7 @@
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="folio" class="form-label">No.Folio</label>
-                      <input type="text" class="form-control is-invalid"  id="folio" maxlength="6" minlength="6" placeholder="Escribe el No.Folio de expediente" required style="text-transform: uppercase;" >
+                      <input type="text" class="form-control is-invalid"  id="folio" maxlength="6" minlength="6" placeholder="Escribe el No.Folio del expediente" required style="text-transform: uppercase;" >
                       <div id="folio-feedback" class="invalid-feedback">
                         Por favor, escribe de manera correcta el número de folio.
                       </div> 
@@ -261,13 +324,13 @@
                   </div>
                 </div>
 
-                <!--
-                          <div class="row">
+                
+                <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="afiliacion" class="form-label">Afiliación</label>
                       <select class="form-select" id="afiliacion" name="tarjeta">
-                        <option selected value="NINGUNO">¿Cuenta con alguna afiliación?</option>
+                        <option selected value="NINGUNA">¿Cuenta con alguna afiliación?</option>
                         <option value="NINGUNA">NINGUNA</option>
                         <option value="ISSSTE">ISSSTE</option>
                         <option value="IMSS">IMSS</option>
@@ -279,13 +342,12 @@
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="numAfiliacion" class="form-label">No.Afiliación</label>
-                      <input type="text" class="form-control" id="numAfiliacion" placeholder="Escribe el número de afiliación"  style="text-transform: uppercase;">
+                      <input type="text" class="form-control" id="numAfiliacion" placeholder="Escribe el No.Afiliación" maxlength="15" style="text-transform: uppercase;">
                     </div>
                   </div>
                 </div>
-                -->
+                
         
-
                 <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
@@ -364,7 +426,7 @@
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="folio" class="form-label">No.Folio</label>
-                      <input type="text" class="form-control is-invalid"  id="folioU" maxlength="6" minlength="6" placeholder="Escribe el No.Folio de expediente" required style="text-transform: uppercase;" >
+                      <input type="text" class="form-control is-invalid"  id="folioU" maxlength="6" minlength="6" placeholder="Escribe el No.Folio del expediente" required style="text-transform: uppercase;" >
                       <div id="folio-feedback" class="invalid-feedback">
                         Por favor, escribe de manera correcta el número de folio.
                       </div> 
@@ -395,13 +457,12 @@
                   </div>
                 </div>
 
-                  <!--
-                          <div class="row">
+                <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="afiliacion" class="form-label">Afiliación</label>
-                      <select class="form-select" id="afiliacion" name="tarjeta">
-                        <option selected value="NINGUNO">¿Cuenta con alguna afiliación?</option>
+                      <select class="form-select" id="afiliacionU" name="tarjeta">
+                        <option selected>¿Cuenta con alguna afiliación?</option>
                         <option value="NINGUNA">NINGUNA</option>
                         <option value="ISSSTE">ISSSTE</option>
                         <option value="IMSS">IMSS</option>
@@ -413,12 +474,11 @@
                   <div class="col-lg-6">
                     <div class="mb-3">
                       <label for="numAfiliacion" class="form-label">No.Afiliación</label>
-                      <input type="text" class="form-control" id="numAfiliacion" placeholder="Escribe el número de afiliación"  style="text-transform: uppercase;">
+                      <input type="text" class="form-control" id="numAfiliacionU" placeholder="Escribe el No.Afiliación" maxlength="15" style="text-transform: uppercase;">
                     </div>
                   </div>
                 </div>
-                -->
-
+            
                 <div class="row">
                   <div class="col-lg-6">
                     <div class="mb-3">
@@ -504,6 +564,7 @@
         </div>
       </div>
 
+
       <!--Modal de Depurar expediente clínico-->
       <div class="modal fade modal-super" id="modalDepurar">
         <div class="modal-dialog">
@@ -522,16 +583,125 @@
                 <table class="records_list table table-striped table-bordered table-hover" id="mydatatableDepurar">
                     <thead class="table-dark">
                         <tr>
-                          <th style="vertical-align:top;">No.Folio</th>
-                          <th style="vertical-align:top;">Nombre</th>
+                          <th style="vertical-align:top;">
+                            No.Folio
+                            <br>
+                            <select id="filtroFolioD" class="form-select">
+                              <option value="">Todas</option>
+                              <option value="A">A</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="D">D</option>
+                              <option value="E">E</option>
+                              <option value="F">F</option>
+                              <option value="G">G</option>
+                              <option value="H">H</option>
+                              <option value="I">I</option>
+                              <option value="J">J</option>
+                              <option value="K">K</option>
+                              <option value="L">L</option>
+                              <option value="M">M</option>
+                              <option value="N">N</option>
+                              <option value="Ñ">Ñ</option>
+                              <option value="O">O</option>
+                              <option value="P">P</option>
+                              <option value="Q">Q</option>
+                              <option value="R">R</option>
+                              <option value="S">S</option>
+                              <option value="T">T</option>
+                              <option value="U">U</option>
+                              <option value="V">V</option>
+                              <option value="W">W</option>
+                              <option value="Y">Y</option>
+                              <option value="Z">Z</option>
+                          </select>
+                          </th>
+                          <th style="vertical-align:top;">
+                            Nombre
+                            <br>
+                            <select id="filtroNombreD" class="form-select">
+                              <option value="">Todas</option>
+                              <option value="A">A</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="D">D</option>
+                              <option value="E">E</option>
+                              <option value="F">F</option>
+                              <option value="G">G</option>
+                              <option value="H">H</option>
+                              <option value="I">I</option>
+                              <option value="J">J</option>
+                              <option value="K">K</option>
+                              <option value="L">L</option>
+                              <option value="M">M</option>
+                              <option value="N">N</option>
+                              <option value="Ñ">Ñ</option>
+                              <option value="O">O</option>
+                              <option value="P">P</option>
+                              <option value="Q">Q</option>
+                              <option value="R">R</option>
+                              <option value="S">S</option>
+                              <option value="T">T</option>
+                              <option value="U">U</option>
+                              <option value="V">V</option>
+                              <option value="W">W</option>
+                              <option value="Y">Y</option>
+                              <option value="Z">Z</option>
+                          </select>
+                          </th>
                           <th style="vertical-align:top;">Edad</th>
                           <th style="vertical-align:top;">Dirección</th>
-                          <th style="vertical-align:top;">CURP</th>
+                          <th style="vertical-align:top;">
+                            Afiliación
+                            <br>
+                            <select id="filtroAfiliacionD" class="form-select">
+                              <option value="">Todas</option>
+                              <option value="NINGUNA">NINGUNA</option>
+                              <option value="ISSSTE">ISSSTE</option>
+                              <option value="IMSS">IMSS</option>
+                              <option value="OTRO">OTRO</option>
+                            </select>
+                          </th>
+                          <th style="vertical-align:top;">No.Afiliación</th>
+                          <th style="vertical-align:top;">
+                            CURP
+                            <br>
+                            <select id="filtroCurpD" class="form-select">
+                              <option value="">Todas</option>
+                              <option value="A">A</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="D">D</option>
+                              <option value="E">E</option>
+                              <option value="F">F</option>
+                              <option value="G">G</option>
+                              <option value="H">H</option>
+                              <option value="I">I</option>
+                              <option value="J">J</option>
+                              <option value="K">K</option>
+                              <option value="L">L</option>
+                              <option value="M">M</option>
+                              <option value="N">N</option>
+                              <option value="Ñ">Ñ</option>
+                              <option value="O">O</option>
+                              <option value="P">P</option>
+                              <option value="Q">Q</option>
+                              <option value="R">R</option>
+                              <option value="S">S</option>
+                              <option value="T">T</option>
+                              <option value="U">U</option>
+                              <option value="V">V</option>
+                              <option value="W">W</option>
+                              <option value="Y">Y</option>
+                              <option value="Z">Z</option>
+                          </select>
+                          </th>
                           <th style="vertical-align:top;">Fecha de ingreso</th>
                           <th style="vertical-align:top;">Tarjeta</th>
                           <th style="vertical-align:top;">Reposición</th>
                           <th style="vertical-align:top;">Fecha de nacimiento</th>
                           <th style="vertical-align:top;">Ciudad de nacimiento</th>
+                          <th style="vertical-align:top;">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="expedientes-depuracion">
@@ -565,6 +735,28 @@
         </div>
       </div>
     </div>
+
+    
+      <!--Modal de Eliminar expediente clínico depuración-->
+      <div class="modal" id="modalEliminarD">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header" id="headerEliminar">
+              <h5 class="modal-title">Eliminar Expediente Clínico</h5>
+              <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+              <h3>¿Estas seguro(a) de que quieres eliminar este expediente?</h3>
+            </div>
+
+            <div class="modal-footer">
+              <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDepurar"><i class="fa fa-ban"></i> Cancelar</button>
+              <button type="button" class="btn btn-success btn-confirmar-eliminar-d" data-bs-dismiss="modal" data-id-eliminar="${expediente.id}"><i class="fa-solid fa-circle-check"></i> Aceptar</button>
+            </div>
+          </div>
+        </div>
+      </div>
     <!--===========================Sección de Scripts de la página===============================================================================================-->
     <!-- Incluyendo jQuery-->
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>

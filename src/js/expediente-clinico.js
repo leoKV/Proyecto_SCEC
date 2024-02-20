@@ -54,6 +54,8 @@ $(document).ready(function() {
                     expediente.nombre,
                     expediente.edad,
                     expediente.direccion,
+                    expediente.afiliacion,
+                    expediente.numAfiliacion,
                     expediente.curp,
                     fechaIngresoFormateada,
                     expediente.tarjeta,
@@ -82,6 +84,8 @@ $(document).ready(function() {
                     $('#nombreU').val(expediente.nombre);
                     $('#edadU').val(expediente.edad);
                     $('#direccionU').val(expediente.direccion);
+                    $('#afiliacionU').val(expediente.afiliacion);
+                    $('#numAfiliacionU').val(expediente.numAfiliacion);
                     $('#curpU').val(expediente.curp);
                     $('#tarjetaU').val(expediente.tarjeta);
                     $('#reposicionTarjetaU').val(expediente.reposicionTarjeta);
@@ -99,6 +103,8 @@ $(document).ready(function() {
                             nombre: $('#nombreU').val(),
                             edad: $('#edadU').val(),
                             direccion: $('#direccionU').val(),
+                            afiliacion:$('#afiliacionU').val(),
+                            numAfiliacion:$('#numAfiliacionU').val(),
                             curp: $('#curpU').val(),
                             tarjeta: $('#tarjetaU').val(),
                             reposicionTarjeta: $('#reposicionTarjetaU').val(),
@@ -222,18 +228,88 @@ $(document).ready(function() {
         table.column(1).search('^' + filtro, true, false).draw(); // Filtrar registros cuya primera letra coincida con la letra seleccionada
     });
 
+    // Configurar evento de cambio para el filtro de Afiliación
+    $('#filtroAfiliacion').on('change', function () {
+            var filtro = $(this).val().trim(); // Obtener el valor seleccionado y eliminar espacios en blanco
+            // Aplicar el filtro a la columna de la Afiliación
+            table.column(4).search(filtro).draw(); // Filtrar registros cuya primera letra coincida con el caracter seleccionado
+    });
+
     // Configurar evento de cambio para el filtro de CURP
     $('#filtroCurp').on('change', function () {
         var filtro = $(this).val().trim(); // Obtener el valor seleccionado y eliminar espacios en blanco
         // Aplicar el filtro a la columna de la CURP
-        table.column(4).search('^' + filtro, true, false).draw(); // Filtrar registros cuya primera letra coincida con el caracter seleccionado
+        table.column(6).search('^' + filtro, true, false).draw(); // Filtrar registros cuya primera letra coincida con el caracter seleccionado
     });
-
 });
 
 $(document).ready(function() {
-    var tableDepurar = null; // Declarar la variable fuera de la función para poder acceder a ella en el callback
+    $('#mydatatableFolios tfoot th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Filtrar.." style="text-transform: uppercase;"/>' );
+    } );
+  
+    var tableFolios = $('#mydatatableFolios').DataTable({
+        "dom": 'B<"float-left"i><"float-right"f>t<"float-left"l><"float-right"p><"clearfix">',
+        "responsive": false,
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+        },
+        "order": [[ 0, "desc" ]],
+        "initComplete": function () {
+          // Solicitar folios al cargar la página
+          electronAPI.sendGetFolios();
 
+          electronAPI.receiveFolios((folios) => {
+              tableFolios.clear();
+  
+              folios.forEach(folios => {
+                  tableFolios.row.add([
+                      folios.folioD,
+                  ]).draw();
+              });
+
+              tableFolios.columns().every(function () {
+                  var that = this;
+  
+                  $('input', this.footer()).on('focus', function () {
+                      // Desactivar eventos de búsqueda
+                      that.off('keyup change');
+                  }).on('blur', function () {
+                      // Volver a activar eventos de búsqueda
+                      that.on('keyup change', function () {
+                          if (that.search() !== this.value) {
+                              that
+                                  .search(this.value)
+                                  .draw();
+                          }
+                      });
+                  });
+              });
+          });
+      }
+    });
+    //Funcionamiento de filtros de búsqueda.
+    // Configurar eventos de búsqueda para cada input de búsqueda en el pie de la tabla
+      $('#mydatatableFolios tfoot input').on('keyup input', function () {
+          // Obtener el índice de la columna
+          var columnIndex = $(this).parent().index();
+          
+          // Ejecutar la búsqueda en esa columna
+          tableFolios.column(columnIndex).search(this.value).draw();
+      });
+  
+      // Configurar evento de cambio para el filtro de folio
+      $('#filtroFolioDisponible').on('change', function () {
+          var filtroDisponible = $(this).val().trim(); // Obtener el valor seleccionado y eliminar espacios en blanco
+          // Aplicar el filtro a la columna del folio
+          tableFolios.column(0).search(filtroDisponible).draw(); // Suponiendo que la columna del folio es la primera (índice 0)
+      });
+  });
+
+$(document).ready(function() {
+    var tableDepurar = null; // Declarar la variable fuera de la función para poder acceder a ella en el callback
+    var idExpediente;
     // Inicializar DataTables cuando se abra el modal
     $('#modalDepurar').on('shown.bs.modal', function () {
         // Destruir la instancia existente de DataTables si existe
@@ -252,7 +328,7 @@ $(document).ready(function() {
             "order": [[ 0, "desc" ]],
             "columnDefs": [
                 {
-                    "targets": 5, // Índice de la columna fechaIngreso (empezando desde 0)
+                    "targets": 7, // Índice de la columna fechaIngreso (empezando desde 0)
                     "render": function (data, type, row, meta) {
                         // Aplicar estilo personalizado a las celdas de la columna fechaIngreso
                         return '<div style="background-color:#d63031; color: white;">' + data + '</div>';
@@ -270,18 +346,26 @@ $(document).ready(function() {
                 // Formatear las fechas antes de agregarlas a la tabla
                 var fechaIngresoFormateada = moment(expediente.fechaIngreso).format('DD/MM/YYYY');
                 var fechaNacimientoFormateada = expediente.fechaNacimiento ? moment(expediente.fechaNacimiento).format('DD/MM/YYYY') : null;
+                var opcionesHTML = `
+                <button type="button" class="btn btn-danger btnEliminarExpD" data-bs-toggle="modal" data-bs-target="#modalEliminarD" data-id="${expediente.id}">
+                    <i class="fa fa-trash"></i> Eliminar
+                </button>
+                `;
 
                 tableDepurar.row.add([
                     expediente.folio,
                     expediente.nombre,
                     expediente.edad,
                     expediente.direccion,
+                    expediente.afiliacion,
+                    expediente.numAfiliacion,
                     expediente.curp,
                     fechaIngresoFormateada,
                     expediente.tarjeta,
                     expediente.reposicionTarjeta,
                     fechaNacimientoFormateada,
-                    expediente.ciudad
+                    expediente.ciudad,
+                    opcionesHTML
                 ]).draw();
             });
             if (tableDepurar.data().any()) {
@@ -291,6 +375,19 @@ $(document).ready(function() {
                 // Si no hay registros, ocultar el botón de depurar
                 $('#btnDepurarExpedintes').hide();
             }
+        });
+
+        //Eliminación
+        $('#expedientes-depuracion').on('click', '.btnEliminarExpD', function () {
+            idExpediente = $(this).data('id');
+            console.log('Id al abrir modal eliminar: ', idExpediente);
+            $('.btn-confirmar-eliminar-d').attr('data-id-eliminar', idExpediente);
+        });
+
+        $('.btn-confirmar-eliminar-d').on('click', function () {
+            idExpedienteD = idExpediente
+            console.log('Id al confirmar eliminar: ', idExpedienteD);
+            window.electronAPI.deleteExp(idExpedienteD);
         });
 
         tableDepurar.columns().every(function () {
@@ -310,6 +407,34 @@ $(document).ready(function() {
                 });
             });
         });
+    });
+
+    // Configurar evento de cambio para el filtro de folio
+    $('#filtroFolioD').on('change', function () {
+        var filtro = $(this).val().trim(); // Obtener el valor seleccionado y eliminar espacios en blanco
+            // Aplicar el filtro a la columna del folio
+        tableDepurar.column(0).search(filtro).draw(); // Suponiendo que la columna del folio es la primera (índice 0)
+    });
+    
+    // Configurar evento de cambio para el filtro de nombre
+    $('#filtroNombreD').on('change', function () {
+        var filtro = $(this).val().trim(); // Obtener el valor seleccionado y eliminar espacios en blanco
+        // Aplicar el filtro a la columna del nombre
+        tableDepurar.column(1).search('^' + filtro, true, false).draw(); // Filtrar registros cuya primera letra coincida con la letra seleccionada
+    });
+    
+    // Configurar evento de cambio para el filtro de Afiliación
+    $('#filtroAfiliacionD').on('change', function () {
+        var filtro = $(this).val().trim(); // Obtener el valor seleccionado y eliminar espacios en blanco
+        // Aplicar el filtro a la columna de la Afiliación
+        tableDepurar.column(4).search(filtro).draw(); // Filtrar registros cuya primera letra coincida con el caracter seleccionado
+    });
+    
+    // Configurar evento de cambio para el filtro de CURP
+    $('#filtroCurpD').on('change', function () {
+        var filtro = $(this).val().trim(); // Obtener el valor seleccionado y eliminar espacios en blanco
+        // Aplicar el filtro a la columna de la CURP
+        tableDepurar.column(6).search('^' + filtro, true, false).draw(); // Filtrar registros cuya primera letra coincida con el caracter seleccionado
     });
 });
 
@@ -350,6 +475,8 @@ const expFolio = document.getElementById('folio');
 const expNombre = document.getElementById('nombre');
 const expEdad = document.getElementById('edad');
 const expDireccion = document.getElementById('direccion');
+const expAfiliacion = document.getElementById('afiliacion');
+const expNumAfiliacion = document.getElementById('numAfiliacion');
 const expCurp = document.getElementById('curp');
 const expTarjeta = document.getElementById('tarjeta');
 const expReposicion = document.getElementById('reposicionTarjeta');
@@ -364,6 +491,8 @@ formAgregar.addEventListener('submit', (e) =>{
         nombre: expNombre.value,
         edad: expEdad.value,
         direccion: expDireccion.value,
+        afiliacion: expAfiliacion.value,
+        numAfiliacion: expNumAfiliacion.value,
         curp: expCurp.value,
         tarjeta: expTarjeta.value,
         reposicionTarjeta: expReposicion.value,
