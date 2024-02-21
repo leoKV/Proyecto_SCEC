@@ -42,11 +42,20 @@ contextBridge.exposeInMainWorld('electronAPI', {
   //Funciones para eliminar expedientes.
   deleteExp: (idExpedienteD) => ipcRenderer.send('deleteExp', idExpedienteD),
 
+  deleteExpD: (idExpedienteD) => ipcRenderer.send('deleteExpD', idExpedienteD),
+
   listenExpDeletedSuccessfully: (callback) => {
     ipcRenderer.on('expDeletedSuccessfully', callback);
   },
   listenExpDeleteError: (callback) => {
     ipcRenderer.on('expDeleteError', callback);
+  },
+
+  listenExpDeletedSuccessfullyD: (callback) => {
+    ipcRenderer.on('expDeletedSuccessfullyD', callback);
+  },
+  listenExpDeleteErrorD: (callback) => {
+    ipcRenderer.on('expDeleteErrorD', callback);
   },
   //Funciones para eliminar expedientes.
   depurarExp: () => ipcRenderer.send('depurarExp'),

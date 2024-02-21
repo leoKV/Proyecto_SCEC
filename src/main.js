@@ -24,7 +24,7 @@ function createWindow() {
 ipcMain.on('getExpedientes', async (event) => {
     try {
         const conn = await getConnection();
-        const result = await conn.query('SELECT * FROM expediente');
+        const result = await conn.query('SELECT * FROM expediente ');
         event.reply('receiveExpedientes', result[0]);
     } catch (error) {
         console.log(error);
@@ -175,7 +175,26 @@ ipcMain.on('deleteExp', async (event, idExpedienteD) => {
         console.log(error);
     }
 });
+//Funciones del eliminación de expedientes en el modal depuración
+async function deleteExpD(idExpedienteD){
+    try{
+        const conn = await getConnection();
+        const result = await conn.query('DELETE FROM expediente WHERE id = ? ', idExpedienteD)
+        console.log(result)
+        mainWindow.webContents.send('expDeletedSuccessfullyD');
+    }catch(error){
+        console.log(error)
+        mainWindow.webContents.send('expDeleteErrorD');
+    }
+}
 
+ipcMain.on('deleteExpD', async (event, idExpedienteD) => {
+    try {
+        await deleteExpD(idExpedienteD)
+    } catch (error) {
+        console.log(error);
+    }
+});
 //Funciones del depuración de expedientes
 async function depurarExp(){
     try{

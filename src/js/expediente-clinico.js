@@ -305,11 +305,12 @@ $(document).ready(function() {
           // Aplicar el filtro a la columna del folio
           tableFolios.column(0).search(filtroDisponible).draw(); // Suponiendo que la columna del folio es la primera (índice 0)
       });
-  });
+});
 
 $(document).ready(function() {
     var tableDepurar = null; // Declarar la variable fuera de la función para poder acceder a ella en el callback
     var idExpediente;
+    var botonD= false;
     // Inicializar DataTables cuando se abra el modal
     $('#modalDepurar').on('shown.bs.modal', function () {
         // Destruir la instancia existente de DataTables si existe
@@ -371,6 +372,8 @@ $(document).ready(function() {
             if (tableDepurar.data().any()) {
                 // Si hay registros, mostrar el botón de depurar
                 $('#btnDepurarExpedintes').show();
+
+    
             } else {
                 // Si no hay registros, ocultar el botón de depurar
                 $('#btnDepurarExpedintes').hide();
@@ -381,13 +384,46 @@ $(document).ready(function() {
         $('#expedientes-depuracion').on('click', '.btnEliminarExpD', function () {
             idExpediente = $(this).data('id');
             console.log('Id al abrir modal eliminar: ', idExpediente);
-            $('.btn-confirmar-eliminar-d').attr('data-id-eliminar', idExpediente);
+            $('.btn-confirmar-eliminar-d').attr('data-id-eliminar-d', idExpediente);
         });
 
-        $('.btn-confirmar-eliminar-d').on('click', function () {
+        $('.btn-confirmar-eliminar-d').on('click',async function () {
             idExpedienteD = idExpediente
             console.log('Id al confirmar eliminar: ', idExpedienteD);
-            window.electronAPI.deleteExp(idExpedienteD);
+            window.electronAPI.deleteExpD(idExpedienteD);
+        });
+
+        window.electronAPI.listenExpDeletedSuccessfullyD(() => {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "¡Expediente eliminado correctamente!",
+                showConfirmButton: false,
+                timer: 3000
+            }).then(() => {
+                $('#modalDepurar').modal('show');
+                                // Controlador de eventos para el botón btnDepurarExpedientes
+                $('#btnDepurarExpedintes').on('click', function() {
+                    // No recargar la página cuando el botón es presionado
+                    botonD = true;
+                });
+                // Controlador de eventos para detectar el cierre del modal
+                $('#modalDepurar').on('hidden.bs.modal', function (e) {
+                    if(!botonD){
+                        location.reload();
+                    } 
+                });
+            });
+        });    
+        window.electronAPI.listenExpDeleteErrorD(() => {
+            Swal.fire({
+                position: "top-end",
+                icon: 'error',
+                title: '¡Error al eliminar expediente!',
+                text: `Ocurrio un error, intentalo más tarde.`,
+                showConfirmButton: false,
+                timer: 4500
+            });
         });
 
         tableDepurar.columns().every(function () {
