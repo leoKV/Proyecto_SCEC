@@ -2,6 +2,7 @@
 const { BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const {getConnection} = require('./js/database');
+const { off } = require('process');
 
 let mainWindow = null;
   
@@ -18,19 +19,136 @@ function createWindow() {
   
     mainWindow.loadFile('src/ui/index.html');
 }
+//Función para listar todos los expedientes:
 
-
-//Función para listar todos los expedintes
-ipcMain.on('getExpedientes', async (event) => {
+ipcMain.on('getExpedientes', async (event, page, pageSize, filtroFolio, filtroAfiliacion) => {
     try {
         const conn = await getConnection();
-        const result = await conn.query('SELECT * FROM expediente ');
-        event.reply('receiveExpedientes', result[0]);
+        const offset = (page - 1) * pageSize;
+        let query = 'SELECT * FROM expediente';
+
+        // Verificar si se proporciona una letra de folio para filtrar
+        if (filtroFolio) {
+            query += ' WHERE folio LIKE ?';
+            filtroFolio += '%'; // Añadir '%' para que busque todas las combinaciones de la letra
+        }
+
+        // Verificar si se proporciona una afiliación para filtrar
+        if (filtroAfiliacion) {
+            if (filtroFolio) {
+                query += ' AND afiliacion = ?'; // Agregar condición de filtrado si ya hay una condición de folio
+            } else {
+                query += ' WHERE afiliacion = ?'; // Agregar condición de filtrado si no hay una condición de folio
+            }
+        }
+
+        query += ' LIMIT ? OFFSET ?';
+
+        let queryParams = []; // Arreglo para almacenar los parámetros de la consulta
+
+        // Si se proporciona una letra de folio, agregarla a los parámetros de la consulta
+        if (filtroFolio) {
+            queryParams.push(filtroFolio);
+        }
+
+        // Si se proporciona una afiliación, agregarla a los parámetros de la consulta
+        if (filtroAfiliacion) {
+            queryParams.push(filtroAfiliacion);
+        }
+
+        queryParams.push(pageSize, offset); // Añadir el tamaño de página y el desplazamiento a los parámetros de la consulta
+
+        const result = await conn.query(query, queryParams);
+
+        // Obtener el número total de registros sin aplicar ningún filtro
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+        
+        // Si se proporciona una letra de folio, ajustar la consulta para contar solo los registros que coinciden con esa letra
+        if (filtroFolio) {
+            totalCountQuery += ' WHERE folio LIKE ?';
+        }
+
+        // Si se proporciona una afiliación, ajustar la consulta para contar solo los registros que coinciden con esa afiliación
+        if (filtroAfiliacion) {
+            if (filtroFolio) {
+                totalCountQuery += ' AND afiliacion = ?'; // Agregar condición de filtrado si ya hay una condición de folio
+            } else {
+                totalCountQuery += ' WHERE afiliacion = ?'; // Agregar condición de filtrado si no hay una condición de folio
+            }
+        }
+
+        const totalCount = await conn.query(totalCountQuery, queryParams);
+        const totalRecords = totalCount[0][0].total;
+
+        event.reply('receiveExpedientes', { 
+            totalRecords: totalRecords,
+            filteredRecords: totalRecords, // En este caso, no aplicamos filtros, por lo que el total y el filtrado son iguales
+            data: result[0] 
+        });
     } catch (error) {
         console.log(error);
-        event.reply('receiveExpedientes', []);
+        event.reply('receiveExpedientes', { 
+            totalRecords: 0,
+            filteredRecords: 0,
+            data: []
+        });
     }
 });
+
+/*
+ipcMain.on('getExpedientes', async (event, page, pageSize,filtroFolio) => {
+    try {
+        const conn = await getConnection();
+        const offset = (page - 1) * pageSize;
+        let query = 'SELECT * FROM expediente';
+
+        // Añadir condiciones de filtro según los parámetros proporcionados
+        if (filtroFolio) {
+            query += ' WHERE folio LIKE ?';
+            filtroFolio += '%'; // Añadir '%' para que busque todas las combinaciones de la letra
+        }
+
+        query += ' LIMIT ? OFFSET ?';
+
+        let queryParams = []; // Arreglo para almacenar los parámetros de la consulta
+
+        // Si se proporciona una letra de folio, agregarla a los parámetros de la consulta
+        if (filtroFolio) {
+            queryParams.push(filtroFolio);
+        }
+
+        queryParams.push(pageSize, offset); // Añadir el tamaño de página y el desplazamiento a los parámetros de la consulta
+
+        const result = await conn.query(query, queryParams);
+
+        // Obtener el número total de registros sin aplicar ningún filtro
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+        
+        // Si se proporciona una letra de folio, ajustar la consulta para contar solo los registros que coinciden con esa letra
+        if (filtroFolio) {
+            totalCountQuery += ' WHERE folio LIKE ?';
+            // Agregar la letra de folio a los parámetros de la consulta para el recuento total
+            queryParams.push(filtroFolio);
+        }
+
+        const totalCount = await conn.query(totalCountQuery, queryParams);
+        const totalRecords = totalCount[0][0].total;
+
+        event.reply('receiveExpedientes', { 
+            totalRecords: totalRecords,
+            filteredRecords: totalRecords, // En este caso, no aplicamos filtros, por lo que el total y el filtrado son iguales
+            data: result[0] 
+        });
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveExpedientes', { 
+            totalRecords: 0,
+            filteredRecords: 0,
+            data: []
+        });
+    }
+});
+*/
 
 //Función para listar todos los números de folio disponibles para insertar nuevos expedientes
 ipcMain.on('getFoliosDisponibles', async (event) => {

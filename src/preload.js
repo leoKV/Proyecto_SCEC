@@ -1,9 +1,11 @@
 // preload.js
 const { contextBridge, ipcRenderer, remote } = require('electron');
+// Bandera para verificar si el listener ya está establecido
+let expedientesListenerSet = false;
 
+// Establecer el límite máximo de oyentes para el evento receiveExpedientes
 contextBridge.exposeInMainWorld('electronAPI', {
   remote: remote,
-  //Funciones de creación de expedientes.
   createExp: (expediente) => ipcRenderer.send('createExp', expediente),
 
   listenExpInsertedSuccessfully: (callback) => {
@@ -12,11 +14,45 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listenExpInsertError: (callback) => {
     ipcRenderer.on('expInsertError', callback);
   },
+  // Funciones para listar expedientes.
+  sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion) => {
+  // Enviar la solicitud al proceso principal con los filtros correspondientes
+    if (filtroFolio !== null && filtroAfiliacion !== null) {
+      ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion);
+    } else if (filtroFolio !== null) {
+      ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio);
+    } else if (filtroAfiliacion !== null) {
+      ipcRenderer.send('getExpedientes', page, pageSize, filtroAfiliacion);
+    } else {
+      ipcRenderer.send('getExpedientes', page, pageSize);
+    }
+  },
+  receiveExpedientes: (callback) => {
+    // Si el listener ya está establecido, eliminamos el listener anterior
+    if (expedientesListenerSet) {
+      ipcRenderer.removeAllListeners('receiveExpedientes');
+    }
+    // Agregamos el listener con una función anónima para poder eliminarlo correctamente
+    ipcRenderer.on('receiveExpedientes', (event, data) => {
+      expedientesListenerSet = true; // Establecer la bandera
+      callback(data);
+    });
+  },
   //Funciones para listar expedientes.
+  /*
   sendGetExpedientes: () => ipcRenderer.send('getExpedientes'),
   receiveExpedientes: (callback) => {
     ipcRenderer.on('receiveExpedientes', (event, expedientes) => callback(expedientes));
   },
+  */
+  //Funciones para listar expedientes.
+
+  /*
+  sendGetExpedientes: (page, pageSize) => ipcRenderer.send('getExpedientes', page, pageSize),
+  receiveExpedientes: (callback) => {
+    ipcRenderer.on('receiveExpedientes', (event, data) => callback(data));
+  },
+  */
   //Funciones para listar folios disponibles.
   sendGetFolios: () => ipcRenderer.send('getFoliosDisponibles'),
   receiveFolios: (callback) => {

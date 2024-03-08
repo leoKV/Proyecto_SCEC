@@ -68,7 +68,7 @@
                       No.Folio
                       <br>
                       <select id="filtroFolio" class="form-select">
-                          <option value="">Todas</option>
+                          <option value="">Todos</option>
                           <option value="A">A</option>
                           <option value="B">B</option>
                           <option value="C">C</option>
@@ -97,45 +97,13 @@
                           <option value="Z">Z</option>
                       </select>
                     </th>
-                    <th style="vertical-align:top;">
-                      Nombre
-                      <br>
-                      <select id="filtroNombre" class="form-select">
-                        <option value="">Todas</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                        <option value="F">F</option>
-                        <option value="G">G</option>
-                        <option value="H">H</option>
-                        <option value="I">I</option>
-                        <option value="J">J</option>
-                        <option value="K">K</option>
-                        <option value="L">L</option>
-                        <option value="M">M</option>
-                        <option value="N">N</option>
-                        <option value="Ñ">Ñ</option>
-                        <option value="O">O</option>
-                        <option value="P">P</option>
-                        <option value="Q">Q</option>
-                        <option value="R">R</option>
-                        <option value="S">S</option>
-                        <option value="T">T</option>
-                        <option value="U">U</option>
-                        <option value="V">V</option>
-                        <option value="W">W</option>
-                        <option value="Y">Y</option>
-                        <option value="Z">Z</option>
-                    </select>
-                    </th>
+                    <th style="vertical-align:top;">Nombre</th>
                     <th style="vertical-align:top;">Edad</th>
                     <th style="vertical-align:top;">Dirección</th>
                     <th style="vertical-align:top;">
                       Afiliación
                       <br>
-                      <select id="filtroAfiliacion" class="form-select">
+                      <select id="filtroAfiliacion" class="form-select" style="display: none;">
                         <option value="">Todas</option>
                         <option value="NINGUNA">NINGUNA</option>
                         <option value="ISSSTE">ISSSTE</option>
@@ -144,39 +112,7 @@
                     </select>
                     </th>
                     <th style="vertical-align:top;">No.Afiliación</th>
-                    <th style="vertical-align:top;">
-                      CURP
-                      <br>
-                      <select id="filtroCurp" class="form-select">
-                        <option value="">Todas</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                        <option value="F">F</option>
-                        <option value="G">G</option>
-                        <option value="H">H</option>
-                        <option value="I">I</option>
-                        <option value="J">J</option>
-                        <option value="K">K</option>
-                        <option value="L">L</option>
-                        <option value="M">M</option>
-                        <option value="N">N</option>
-                        <option value="Ñ">Ñ</option>
-                        <option value="O">O</option>
-                        <option value="P">P</option>
-                        <option value="Q">Q</option>
-                        <option value="R">R</option>
-                        <option value="S">S</option>
-                        <option value="T">T</option>
-                        <option value="U">U</option>
-                        <option value="V">V</option>
-                        <option value="W">W</option>
-                        <option value="Y">Y</option>
-                        <option value="Z">Z</option>
-                    </select>
-                    </th>
+                    <th style="vertical-align:top;">CURP</th>
                     <th style="vertical-align:top;">Fecha de ingreso</th>
                     <th style="vertical-align:top;">Tarjeta</th>
                     <th style="vertical-align:top;">Reposición</th>
@@ -410,7 +346,6 @@
           </div>
         </div>
       </div>
-    
       <!--Modal de Actualizar expediente clínico-->
       <div class="modal" id="modalActualizar">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -542,9 +477,8 @@
           </div>
         </div>
       </div>
-
-       <!--Modal de Eliminar expediente clínico-->
-       <div class="modal" id="modalEliminar">
+      <!--Modal de Eliminar expediente clínico-->
+      <div class="modal" id="modalEliminar">
         <div class="modal-dialog modal-lg modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header" id="headerEliminar">
@@ -563,8 +497,6 @@
           </div>
         </div>
       </div>
-
-
       <!--Modal de Depurar expediente clínico-->
       <div class="modal fade modal-super" id="modalDepurar">
         <div class="modal-dialog">
@@ -655,7 +587,7 @@
                             Afiliación
                             <br>
                             <select id="filtroAfiliacionD" class="form-select">
-                              <option value="">Todas</option>
+                              <option value="NINGUNA">Todas</option>
                               <option value="NINGUNA">NINGUNA</option>
                               <option value="ISSSTE">ISSSTE</option>
                               <option value="IMSS">IMSS</option>
@@ -716,8 +648,8 @@
           </div>
         </div>
       </div>
-    <!--Modal de confirmación de depuración-->
-    <div class="modal fade" id="modalConfirmDep">
+      <!--Modal de confirmación de depuración-->
+      <div class="modal fade" id="modalConfirmDep">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header" id="headerConfirmDep">
@@ -734,9 +666,7 @@
           </div>
         </div>
       </div>
-    </div>
-
-    
+      </div>
       <!--Modal de Eliminar expediente clínico depuración-->
       <div class="modal" id="modalEliminarD">
         <div class="modal-dialog modal-lg modal-dialog-centered">
