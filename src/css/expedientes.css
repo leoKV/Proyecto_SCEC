@@ -104,3 +104,8 @@ h1#exp{
     background-color:#d63031;
     color: white;
 }
+
+#mydatatable,#mydatatableFolios{
+    font-size: 15px;
+    font-family: 'Arial', sans-serif;;
+}

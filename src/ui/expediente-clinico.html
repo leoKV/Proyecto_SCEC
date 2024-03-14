@@ -66,50 +66,12 @@
                   <tr>
                     <th style="vertical-align:top;">
                       No.Folio
-                      <br>
-                      <select id="filtroFolio" class="form-select">
-                          <option value="">Todos</option>
-                          <option value="A">A</option>
-                          <option value="B">B</option>
-                          <option value="C">C</option>
-                          <option value="D">D</option>
-                          <option value="E">E</option>
-                          <option value="F">F</option>
-                          <option value="G">G</option>
-                          <option value="H">H</option>
-                          <option value="I">I</option>
-                          <option value="J">J</option>
-                          <option value="K">K</option>
-                          <option value="L">L</option>
-                          <option value="M">M</option>
-                          <option value="N">N</option>
-                          <option value="Ñ">Ñ</option>
-                          <option value="O">O</option>
-                          <option value="P">P</option>
-                          <option value="Q">Q</option>
-                          <option value="R">R</option>
-                          <option value="S">S</option>
-                          <option value="T">T</option>
-                          <option value="U">U</option>
-                          <option value="V">V</option>
-                          <option value="W">W</option>
-                          <option value="Y">Y</option>
-                          <option value="Z">Z</option>
-                      </select>
                     </th>
                     <th style="vertical-align:top;">Nombre</th>
                     <th style="vertical-align:top;">Edad</th>
                     <th style="vertical-align:top;">Dirección</th>
                     <th style="vertical-align:top;">
                       Afiliación
-                      <br>
-                      <select id="filtroAfiliacion" class="form-select" style="display: none;">
-                        <option value="">Todas</option>
-                        <option value="NINGUNA">NINGUNA</option>
-                        <option value="ISSSTE">ISSSTE</option>
-                        <option value="IMSS">IMSS</option>
-                        <option value="OTRO">OTRO</option>
-                    </select>
                     </th>
                     <th style="vertical-align:top;">No.Afiliación</th>
                     <th style="vertical-align:top;">CURP</th>
@@ -122,20 +84,66 @@
                   </tr>
               </thead>
               <tfoot>
-                  <tr>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                      <th>Filter..</th>
-                  </tr>
+                <tr>
+                  <th>
+                    <select id="filtroFolio" class="form-select">
+                      <option value="">Todos</option>
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="C">C</option>
+                      <option value="D">D</option>
+                      <option value="E">E</option>
+                      <option value="F">F</option>
+                      <option value="G">G</option>
+                      <option value="H">H</option>
+                      <option value="I">I</option>
+                      <option value="J">J</option>
+                      <option value="K">K</option>
+                      <option value="L">L</option>
+                      <option value="M">M</option>
+                      <option value="N">N</option>
+                      <option value="Ñ">Ñ</option>
+                      <option value="O">O</option>
+                      <option value="P">P</option>
+                      <option value="Q">Q</option>
+                      <option value="R">R</option>
+                      <option value="S">S</option>
+                      <option value="T">T</option>
+                      <option value="U">U</option>
+                      <option value="V">V</option>
+                      <option value="W">W</option>
+                      <option value="Y">Y</option>
+                      <option value="Z">Z</option>
+                  </select>
+                  </th>
+                  <th><input type="text" id="filtroNombreF" placeholder="Buscar..." style="text-transform: uppercase;display: none;"></th>
+                  <th><input type="text" id="filtroEdadF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th><input type="text" id="filtroDireccionF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th>
+                    <select id="filtroAfiliacion" class="form-select" style="display: none;">
+                      <option value="">Todas</option>
+                      <option value="NINGUNA">NINGUNA</option>
+                      <option value="ISSSTE">ISSSTE</option>
+                      <option value="IMSS">IMSS</option>
+                      <option value="OTRO">OTRO</option>
+                  </select>
+                  </th>
+                  <th><input type="text" id="filtroNumAfiliacionF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th><input type="text" id="filtroCURPF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th>
+
+                  </th>
+                  <th>
+
+                  </th>
+                  <th>
+
+                  </th>
+                  <th>
+
+                  </th>
+                  <th><input type="text" id="filtroCiudadNacimientoF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+              </tr>
               </tfoot>
               <tbody id="expedientes-tbody">
               </tbody>
@@ -183,7 +191,7 @@
               </thead>
               <tfoot>
                   <tr>
-                      <th>Filter..</th>
+                    <th><input type="text" id="folioFooterD" placeholder="Buscar..." style="text-transform: uppercase;"></th>
                   </tr>
               </tfoot>
               <tbody id="folios-tbody">
@@ -518,7 +526,7 @@
                           <th style="vertical-align:top;">
                             No.Folio
                             <br>
-                            <select id="filtroFolioD" class="form-select">
+                            <select id="filtroFolioDep" class="form-select">
                               <option value="">Todas</option>
                               <option value="A">A</option>
                               <option value="B">B</option>
@@ -550,83 +558,15 @@
                           </th>
                           <th style="vertical-align:top;">
                             Nombre
-                            <br>
-                            <select id="filtroNombreD" class="form-select">
-                              <option value="">Todas</option>
-                              <option value="A">A</option>
-                              <option value="B">B</option>
-                              <option value="C">C</option>
-                              <option value="D">D</option>
-                              <option value="E">E</option>
-                              <option value="F">F</option>
-                              <option value="G">G</option>
-                              <option value="H">H</option>
-                              <option value="I">I</option>
-                              <option value="J">J</option>
-                              <option value="K">K</option>
-                              <option value="L">L</option>
-                              <option value="M">M</option>
-                              <option value="N">N</option>
-                              <option value="Ñ">Ñ</option>
-                              <option value="O">O</option>
-                              <option value="P">P</option>
-                              <option value="Q">Q</option>
-                              <option value="R">R</option>
-                              <option value="S">S</option>
-                              <option value="T">T</option>
-                              <option value="U">U</option>
-                              <option value="V">V</option>
-                              <option value="W">W</option>
-                              <option value="Y">Y</option>
-                              <option value="Z">Z</option>
-                          </select>
                           </th>
                           <th style="vertical-align:top;">Edad</th>
                           <th style="vertical-align:top;">Dirección</th>
                           <th style="vertical-align:top;">
                             Afiliación
-                            <br>
-                            <select id="filtroAfiliacionD" class="form-select">
-                              <option value="NINGUNA">Todas</option>
-                              <option value="NINGUNA">NINGUNA</option>
-                              <option value="ISSSTE">ISSSTE</option>
-                              <option value="IMSS">IMSS</option>
-                              <option value="OTRO">OTRO</option>
-                            </select>
                           </th>
                           <th style="vertical-align:top;">No.Afiliación</th>
                           <th style="vertical-align:top;">
                             CURP
-                            <br>
-                            <select id="filtroCurpD" class="form-select">
-                              <option value="">Todas</option>
-                              <option value="A">A</option>
-                              <option value="B">B</option>
-                              <option value="C">C</option>
-                              <option value="D">D</option>
-                              <option value="E">E</option>
-                              <option value="F">F</option>
-                              <option value="G">G</option>
-                              <option value="H">H</option>
-                              <option value="I">I</option>
-                              <option value="J">J</option>
-                              <option value="K">K</option>
-                              <option value="L">L</option>
-                              <option value="M">M</option>
-                              <option value="N">N</option>
-                              <option value="Ñ">Ñ</option>
-                              <option value="O">O</option>
-                              <option value="P">P</option>
-                              <option value="Q">Q</option>
-                              <option value="R">R</option>
-                              <option value="S">S</option>
-                              <option value="T">T</option>
-                              <option value="U">U</option>
-                              <option value="V">V</option>
-                              <option value="W">W</option>
-                              <option value="Y">Y</option>
-                              <option value="Z">Z</option>
-                          </select>
                           </th>
                           <th style="vertical-align:top;">Fecha de ingreso</th>
                           <th style="vertical-align:top;">Tarjeta</th>

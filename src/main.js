@@ -19,8 +19,8 @@ function createWindow() {
   
     mainWindow.loadFile('src/ui/index.html');
 }
+/////////////-------LISTAR TODOS LOS EXPEDIENTES-------/////////////
 //Función para listar todos los expedientes:
-
 ipcMain.on('getExpedientes', async (event, page, pageSize, filtroFolio, filtroAfiliacion) => {
     try {
         const conn = await getConnection();
@@ -95,17 +95,16 @@ ipcMain.on('getExpedientes', async (event, page, pageSize, filtroFolio, filtroAf
     }
 });
 
-/*
-ipcMain.on('getExpedientes', async (event, page, pageSize,filtroFolio) => {
+/////////////-------LISTAR TODOS LOS FOLIOS DISPONIBLES------/////////////
+ipcMain.on('getFoliosDisponibles', async (event, page, pageSize, filtroFolioD) => {
     try {
         const conn = await getConnection();
         const offset = (page - 1) * pageSize;
-        let query = 'SELECT * FROM expediente';
-
-        // Añadir condiciones de filtro según los parámetros proporcionados
-        if (filtroFolio) {
-            query += ' WHERE folio LIKE ?';
-            filtroFolio += '%'; // Añadir '%' para que busque todas las combinaciones de la letra
+        let query = 'SELECT * FROM folioDisponible';
+        // Verificar si se proporciona una letra de folio para filtrar
+        if (filtroFolioD) {
+            query += ' WHERE folioD LIKE ?';
+            filtroFolioD += '%'; // Añadir '%' para que busque todas las combinaciones de la letra
         }
 
         query += ' LIMIT ? OFFSET ?';
@@ -113,55 +112,42 @@ ipcMain.on('getExpedientes', async (event, page, pageSize,filtroFolio) => {
         let queryParams = []; // Arreglo para almacenar los parámetros de la consulta
 
         // Si se proporciona una letra de folio, agregarla a los parámetros de la consulta
-        if (filtroFolio) {
-            queryParams.push(filtroFolio);
+        if (filtroFolioD) {
+            queryParams.push(filtroFolioD);
         }
+
 
         queryParams.push(pageSize, offset); // Añadir el tamaño de página y el desplazamiento a los parámetros de la consulta
 
         const result = await conn.query(query, queryParams);
 
         // Obtener el número total de registros sin aplicar ningún filtro
-        let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM folioDisponible';
         
         // Si se proporciona una letra de folio, ajustar la consulta para contar solo los registros que coinciden con esa letra
-        if (filtroFolio) {
-            totalCountQuery += ' WHERE folio LIKE ?';
-            // Agregar la letra de folio a los parámetros de la consulta para el recuento total
-            queryParams.push(filtroFolio);
+        if (filtroFolioD) {
+            totalCountQuery += ' WHERE folioD LIKE ?';
         }
 
         const totalCount = await conn.query(totalCountQuery, queryParams);
         const totalRecords = totalCount[0][0].total;
 
-        event.reply('receiveExpedientes', { 
+        event.reply('receiveFolios', { 
             totalRecords: totalRecords,
             filteredRecords: totalRecords, // En este caso, no aplicamos filtros, por lo que el total y el filtrado son iguales
             data: result[0] 
         });
     } catch (error) {
         console.log(error);
-        event.reply('receiveExpedientes', { 
+        event.reply('receiveFolios', { 
             totalRecords: 0,
             filteredRecords: 0,
             data: []
         });
     }
 });
-*/
 
-//Función para listar todos los números de folio disponibles para insertar nuevos expedientes
-ipcMain.on('getFoliosDisponibles', async (event) => {
-    try {
-        const conn = await getConnection();
-        const result = await conn.query('SELECT * FROM folioDisponible');
-        event.reply('receiveFolios', result[0]);
-    } catch (error) {
-        console.log(error);
-        event.reply('receiveFolios', []);
-    }
-});
-
+/////////////-------LISTAR UN EXPEDIENTE POR ID------/////////////
 // Agrega una nueva función para obtener un expediente por su ID
 ipcMain.on('getExpedienteById', async (event, idExpediente) => {
     try {
@@ -181,21 +167,146 @@ ipcMain.on('getExpedienteById', async (event, idExpediente) => {
     }
 });
 
+/////////////-------LISTAR TODOS LOS EXPEDIENTES A DEPURAR------/////////////
 //Función para listar todos los expedintes que se deben depurar
-ipcMain.on('getExpedientesDepurar', async (event) => {
+///////////////
+// ipcMain.on('getExpedientesDepurar', async (event, page, pageSize) => {
+//     try {
+//         const conn = await getConnection();
+//         const offset = (page - 1) * pageSize;
+//         const result = await conn.query('SELECT * FROM expediente WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR) LIMIT ? OFFSET ?', [pageSize, offset]);
+
+//         // Obtener el número total de registros sin aplicar ningún filtro
+//         const totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+//         const totalCount = await conn.query(totalCountQuery);
+//         const totalRecords = totalCount[0][0].total;
+        
+//         event.reply('receiveExpedientesDepurar', { 
+//             totalRecords: totalRecords,
+//             filteredRecords: totalRecords, // No aplicamos filtros, por lo que el total y el filtrado son iguales
+//             data: result[0]
+//         });
+//     } catch (error) {
+//         console.log(error);
+//         event.reply('receiveExpedientesDepurar', []);
+//     }
+// });
+
+
+
+
+ipcMain.on('getExpedientesDepurar', async (event, page, pageSize,filtroFolioDep) => {
     try {
         const conn = await getConnection();
-        const result = await conn.query('SELECT * FROM expediente WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR) ');
-        event.reply('receiveExpedientesDepurar', result[0]);
+        const offset = (page - 1) * pageSize;
+        //const result = await conn.query('SELECT * FROM expediente WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR) LIMIT ? OFFSET ?', [pageSize, offset]);
+        let query = 'SELECT * FROM expediente';
+
+        if(filtroFolioDep){
+            query+=' WHERE folio LIKE ? AND fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+            filtroFolioDep += '%';
+        }else{
+            query+=' WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+        }
+
+        query+=' LIMIT ? OFFSET ?';
+
+        let queryParams = [];
+
+        if(filtroFolioDep){
+            queryParams.push(filtroFolioDep);
+        }
+
+        queryParams.push(pageSize,offset);
+
+        const result = await conn.query(query, queryParams);
+
+        // Obtener el número total de registros sin aplicar ningún filtro
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+        
+        // Si se proporciona una letra de folio, ajustar la consulta para contar solo los registros que coinciden con esa letra
+        if (filtroFolioDep) {
+            totalCountQuery += ' WHERE folio LIKE ? AND fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+        }else{
+            totalCountQuery += ' WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+        }
+
+        
+        const totalCount = await conn.query(totalCountQuery,queryParams);
+        const totalRecords = totalCount[0][0].total;
+        
+        event.reply('receiveExpedientesDepurar', { 
+            totalRecords: totalRecords,
+            filteredRecords: totalRecords, // No aplicamos filtros, por lo que el total y el filtrado son iguales
+            data: result[0]
+        });
     } catch (error) {
         console.log(error);
-        event.reply('receiveExpedientesDepurar', []);
+        event.reply('receiveExpedientesDepurar', { 
+            totalRecords: 0,
+            filteredRecords: 0,
+            data: []
+        });
     }
 });
 
 
+//fgdhgdhfghgfjghjghkjhjkhkhjkhjjklkljl
+// ipcMain.on('getExpedientesDepurar', async (event,page,pageSize,filtroFolioD) => {
+//     try {
+//         const conn = await getConnection();
+//         const offset = (page - 1) * pageSize;
+//         let query = 'SELECT * FROM expediente';
+
+//         if (filtroFolioD) {
+//             query += ' WHERE folio LIKE ? AND fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+//             filtroFolioD += '%'; // Añadir '%' para que busque todas las combinaciones de la letra
+//         } else {
+//             query +=' WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+//         }
+
+//         query += ' LIMIT ?, ?'; // Cambio en la cláusula LIMIT
+
+//         let queryParams = [];
+
+//         if (filtroFolioD) {
+//             queryParams.push(filtroFolioD);
+//         }
+
+//         queryParams.push(offset, pageSize); // Cambio en los parámetros de la consulta
+
+//         const result = await conn.query(query, queryParams);
+
+//         // Obtener el número total de registros sin aplicar ningún filtro
+//         let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+
+//         // Si se proporciona una letra de folio, ajustar la consulta para contar solo los registros que coinciden con esa letra
+//         if (filtroFolioD) {
+//             totalCountQuery += ' WHERE folio LIKE ? AND fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+//         } else {
+//             totalCountQuery += ' WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+//         }
+
+//         const totalCount = await conn.query(totalCountQuery, queryParams);
+//         const totalRecords = totalCount[0][0].total;
+
+//         event.reply('receiveExpedientesDepurar', { 
+//             totalRecords: totalRecords,
+//             filteredRecords: totalRecords, // En este caso, no aplicamos filtros, por lo que el total y el filtrado son iguales
+//             data: result[0] 
+//         });
+//     } catch (error) {
+//         console.log(error);
+//         event.reply('receiveExpedientesDepurar', { 
+//             totalRecords: 0,
+//             filteredRecords: 0,
+//             data: []
+//         });
+//     }
+// });
 
 
+/////////////-------CREAR NUEVO EXPEDIENTE-------/////////////
 //Función para crear nuevos expedientes clínicos
 async function createExp(expediente){
     try{
@@ -228,7 +339,6 @@ async function createExp(expediente){
 
 }
 
-  
 ipcMain.on('createExp', async (event, expediente) => {
     try {
         await createExp(expediente);
@@ -236,6 +346,8 @@ ipcMain.on('createExp', async (event, expediente) => {
         console.log(error);
     }
 });
+
+/////////////-------ACTUALIZAR EXPEDIENTES-------/////////////
 //Funciones de actualización de expedientes
 async function updateExp(expediente) {
     try {
@@ -273,6 +385,8 @@ ipcMain.on('updateExp', async (event, expediente) => {
         console.log(error);
     }
 });
+
+/////////////-------ELIMINAR EXPEDIENTEN TABLA PRINCIPAL-------/////////////
 //Funciones del eliminación de expedientes
 async function deleteExp(idExpedienteD){
     try{
@@ -293,6 +407,8 @@ ipcMain.on('deleteExp', async (event, idExpedienteD) => {
         console.log(error);
     }
 });
+
+/////////////-------ELIMINAR EXPEDIENTE EN MODAL DE DEPURACIÓN-------/////////////
 //Funciones del eliminación de expedientes en el modal depuración
 async function deleteExpD(idExpedienteD){
     try{
@@ -313,7 +429,9 @@ ipcMain.on('deleteExpD', async (event, idExpedienteD) => {
         console.log(error);
     }
 });
-//Funciones del depuración de expedientes
+
+/////////////-------DEPURACIÓN MASIVA DE EXPEDIENTES-------/////////////
+//Funciones para la depuración de expedientes
 async function depurarExp(){
     try{
         const conn = await getConnection();
@@ -334,7 +452,338 @@ ipcMain.on('depurarExp', async (event) => {
     }
 });
 
-  
+/////////////-------FUNCIONES DE FILTROS DE BUSQUEDA-------/////////////
+// Función para realizar la búsqueda de folios
+ipcMain.on('searchFolios', async (event, busquedaNombre, page, pageSize) => {
+    try {
+        const conn = await getConnection();
+        let query = 'SELECT * FROM folioDisponible';
+        let queryParams = [];
+        
+        // Verificar si se proporciona un término de búsqueda
+        if (busquedaNombre) {
+            query += ' WHERE UPPER(folioD) LIKE ?';
+            busquedaNombre += '%';
+            queryParams.push(busquedaNombre);
+        }
+
+        const offset = (page - 1) * pageSize;
+        query += ' LIMIT ? OFFSET ?';
+        queryParams.push(pageSize, offset);
+
+        const result = await conn.query(query, queryParams);
+
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM folioDisponible';
+        
+        const totalCount = await conn.query(totalCountQuery);
+        const totalRecords = totalCount[0][0].total;
+
+        if (busquedaNombre) {
+            let filteredCountQuery = 'SELECT COUNT(*) AS filtered FROM folioDisponible WHERE UPPER(folioD) LIKE ?';
+            const filteredCount = await conn.query(filteredCountQuery, queryParams);
+            var filteredRecords = filteredCount[0][0].filtered;
+        } else {
+            var filteredRecords = totalRecords;
+        }
+
+        event.reply('receiveFolios', { 
+            totalRecords: totalRecords,
+            filteredRecords: filteredRecords,
+            data: result[0] 
+        });
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveFolios', { 
+            totalRecords: 0,
+            filteredRecords: 0,
+            data: []
+        });
+    }
+});
+
+// Función para realizar la búsqueda de folios
+ipcMain.on('searchNombres', async (event, busquedaNombre, page, pageSize) => {
+    try {
+        const conn = await getConnection();
+        let query = 'SELECT * FROM expediente';
+        let queryParams = [];
+        
+        // Verificar si se proporciona un término de búsqueda
+        if (busquedaNombre) {
+            query += ' WHERE UPPER(nombre) LIKE ?';
+            busquedaNombre += '%';
+            queryParams.push(busquedaNombre);
+        }
+
+        const offset = (page - 1) * pageSize;
+        query += ' LIMIT ? OFFSET ?';
+        queryParams.push(pageSize, offset);
+
+        const result = await conn.query(query, queryParams);
+
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+        
+        const totalCount = await conn.query(totalCountQuery);
+        const totalRecords = totalCount[0][0].total;
+
+        if (busquedaNombre) {
+            let filteredCountQuery = 'SELECT COUNT(*) AS filtered FROM expediente WHERE UPPER(nombre) LIKE ?';
+            const filteredCount = await conn.query(filteredCountQuery, queryParams);
+            var filteredRecords = filteredCount[0][0].filtered;
+        } else {
+            var filteredRecords = totalRecords;
+        }
+
+        event.reply('receiveExpedientes', { 
+            totalRecords: totalRecords,
+            filteredRecords: filteredRecords,
+            data: result[0] 
+        });
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveExpedientes', { 
+            totalRecords: 0,
+            filteredRecords: 0,
+            data: []
+        });
+    }
+});
+
+ipcMain.on('searchEdad', async (event, busquedaEdad, page, pageSize) => {
+    try {
+        const conn = await getConnection();
+        let query = 'SELECT * FROM expediente';
+        let queryParams = [];
+        
+        // Verificar si se proporciona un término de búsqueda
+        if (busquedaEdad) {
+            query += ' WHERE UPPER(edad) LIKE ?';
+            busquedaEdad += '%';
+            queryParams.push(busquedaEdad);
+        }
+
+        const offset = (page - 1) * pageSize;
+        query += ' LIMIT ? OFFSET ?';
+        queryParams.push(pageSize, offset);
+
+        const result = await conn.query(query, queryParams);
+
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+        
+        const totalCount = await conn.query(totalCountQuery);
+        const totalRecords = totalCount[0][0].total;
+
+        if (busquedaEdad) {
+            let filteredCountQuery = 'SELECT COUNT(*) AS filtered FROM expediente WHERE UPPER(edad) LIKE ?';
+            const filteredCount = await conn.query(filteredCountQuery, queryParams);
+            var filteredRecords = filteredCount[0][0].filtered;
+        } else {
+            var filteredRecords = totalRecords;
+        }
+
+        event.reply('receiveExpedientes', { 
+            totalRecords: totalRecords,
+            filteredRecords: filteredRecords,
+            data: result[0] 
+        });
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveExpedientes', { 
+            totalRecords: 0,
+            filteredRecords: 0,
+            data: []
+        });
+    }
+});
+
+ipcMain.on('searchDireccion', async (event, busquedaDireccion, page, pageSize) => {
+    try {
+        const conn = await getConnection();
+        let query = 'SELECT * FROM expediente';
+        let queryParams = [];
+        
+        // Verificar si se proporciona un término de búsqueda
+        if (busquedaDireccion) {
+            query += ' WHERE UPPER(direccion) LIKE ?';
+            busquedaDireccion += '%';
+            queryParams.push(busquedaDireccion);
+        }
+
+        const offset = (page - 1) * pageSize;
+        query += ' LIMIT ? OFFSET ?';
+        queryParams.push(pageSize, offset);
+
+        const result = await conn.query(query, queryParams);
+
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+        
+        const totalCount = await conn.query(totalCountQuery);
+        const totalRecords = totalCount[0][0].total;
+
+        if (busquedaDireccion) {
+            let filteredCountQuery = 'SELECT COUNT(*) AS filtered FROM expediente WHERE UPPER(direccion) LIKE ?';
+            const filteredCount = await conn.query(filteredCountQuery, queryParams);
+            var filteredRecords = filteredCount[0][0].filtered;
+        } else {
+            var filteredRecords = totalRecords;
+        }
+
+        event.reply('receiveExpedientes', { 
+            totalRecords: totalRecords,
+            filteredRecords: filteredRecords,
+            data: result[0] 
+        });
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveExpedientes', { 
+            totalRecords: 0,
+            filteredRecords: 0,
+            data: []
+        });
+    }
+});
+
+ipcMain.on('searchNumA', async (event, busquedaNumA, page, pageSize) => {
+    try {
+        const conn = await getConnection();
+        let query = 'SELECT * FROM expediente';
+        let queryParams = [];
+        
+        // Verificar si se proporciona un término de búsqueda
+        if (busquedaNumA) {
+            query += ' WHERE UPPER(numAfiliacion) LIKE ?';
+            busquedaNumA += '%';
+            queryParams.push(busquedaNumA);
+        }
+
+        const offset = (page - 1) * pageSize;
+        query += ' LIMIT ? OFFSET ?';
+        queryParams.push(pageSize, offset);
+
+        const result = await conn.query(query, queryParams);
+
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+        
+        const totalCount = await conn.query(totalCountQuery);
+        const totalRecords = totalCount[0][0].total;
+
+        if (busquedaNumA) {
+            let filteredCountQuery = 'SELECT COUNT(*) AS filtered FROM expediente WHERE UPPER(numAfiliacion) LIKE ?';
+            const filteredCount = await conn.query(filteredCountQuery, queryParams);
+            var filteredRecords = filteredCount[0][0].filtered;
+        } else {
+            var filteredRecords = totalRecords;
+        }
+
+        event.reply('receiveExpedientes', { 
+            totalRecords: totalRecords,
+            filteredRecords: filteredRecords,
+            data: result[0] 
+        });
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveExpedientes', { 
+            totalRecords: 0,
+            filteredRecords: 0,
+            data: []
+        });
+    }
+});
+
+ipcMain.on('searchCurp', async (event, busquedaCurp, page, pageSize) => {
+    try {
+        const conn = await getConnection();
+        let query = 'SELECT * FROM expediente';
+        let queryParams = [];
+        
+        // Verificar si se proporciona un término de búsqueda
+        if (busquedaCurp) {
+            query += ' WHERE UPPER(curp) LIKE ?';
+            busquedaCurp += '%';
+            queryParams.push(busquedaCurp);
+        }
+
+        const offset = (page - 1) * pageSize;
+        query += ' LIMIT ? OFFSET ?';
+        queryParams.push(pageSize, offset);
+
+        const result = await conn.query(query, queryParams);
+
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+        
+        const totalCount = await conn.query(totalCountQuery);
+        const totalRecords = totalCount[0][0].total;
+
+        if (busquedaCurp) {
+            let filteredCountQuery = 'SELECT COUNT(*) AS filtered FROM expediente WHERE UPPER(curp) LIKE ?';
+            const filteredCount = await conn.query(filteredCountQuery, queryParams);
+            var filteredRecords = filteredCount[0][0].filtered;
+        } else {
+            var filteredRecords = totalRecords;
+        }
+
+        event.reply('receiveExpedientes', { 
+            totalRecords: totalRecords,
+            filteredRecords: filteredRecords,
+            data: result[0] 
+        });
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveExpedientes', { 
+            totalRecords: 0,
+            filteredRecords: 0,
+            data: []
+        });
+    }
+});
+
+ipcMain.on('searchCiudad', async (event, busquedaCiudad, page, pageSize) => {
+    try {
+        const conn = await getConnection();
+        let query = 'SELECT * FROM expediente';
+        let queryParams = [];
+        
+        // Verificar si se proporciona un término de búsqueda
+        if (busquedaCiudad) {
+            query += ' WHERE UPPER(ciudad) LIKE ?';
+            busquedaCiudad += '%';
+            queryParams.push(busquedaCiudad);
+        }
+
+        const offset = (page - 1) * pageSize;
+        query += ' LIMIT ? OFFSET ?';
+        queryParams.push(pageSize, offset);
+
+        const result = await conn.query(query, queryParams);
+
+        let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
+        
+        const totalCount = await conn.query(totalCountQuery);
+        const totalRecords = totalCount[0][0].total;
+
+        if (busquedaCiudad) {
+            let filteredCountQuery = 'SELECT COUNT(*) AS filtered FROM expediente WHERE UPPER(ciudad) LIKE ?';
+            const filteredCount = await conn.query(filteredCountQuery, queryParams);
+            var filteredRecords = filteredCount[0][0].filtered;
+        } else {
+            var filteredRecords = totalRecords;
+        }
+
+        event.reply('receiveExpedientes', { 
+            totalRecords: totalRecords,
+            filteredRecords: filteredRecords,
+            data: result[0] 
+        });
+    } catch (error) {
+        console.log(error);
+        event.reply('receiveExpedientes', { 
+            totalRecords: 0,
+            filteredRecords: 0,
+            data: []
+        });
+    }
+});
+
 module.exports = {
     createWindow,
     createExp

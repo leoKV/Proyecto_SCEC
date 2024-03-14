@@ -6,14 +6,7 @@ let expedientesListenerSet = false;
 // Establecer el límite máximo de oyentes para el evento receiveExpedientes
 contextBridge.exposeInMainWorld('electronAPI', {
   remote: remote,
-  createExp: (expediente) => ipcRenderer.send('createExp', expediente),
-
-  listenExpInsertedSuccessfully: (callback) => {
-    ipcRenderer.on('expInsertedSuccessfully', callback);
-  },
-  listenExpInsertError: (callback) => {
-    ipcRenderer.on('expInsertError', callback);
-  },
+  /////////////-------LISTAR TODOS LOS EXPEDIENTES-------/////////////
   // Funciones para listar expedientes.
   sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion) => {
   // Enviar la solicitud al proceso principal con los filtros correspondientes
@@ -38,31 +31,41 @@ contextBridge.exposeInMainWorld('electronAPI', {
       callback(data);
     });
   },
-  //Funciones para listar expedientes.
-  /*
-  sendGetExpedientes: () => ipcRenderer.send('getExpedientes'),
-  receiveExpedientes: (callback) => {
-    ipcRenderer.on('receiveExpedientes', (event, expedientes) => callback(expedientes));
-  },
-  */
-  //Funciones para listar expedientes.
-
-  /*
-  sendGetExpedientes: (page, pageSize) => ipcRenderer.send('getExpedientes', page, pageSize),
-  receiveExpedientes: (callback) => {
-    ipcRenderer.on('receiveExpedientes', (event, data) => callback(data));
-  },
-  */
+ 
+  /////////////-------LISTAR HISTORIAL DE FOLIOS DISPONIBLES-------/////////////
   //Funciones para listar folios disponibles.
-  sendGetFolios: () => ipcRenderer.send('getFoliosDisponibles'),
+  sendGetFolios: (page, pageSize, filtroFolioD) => {
+      // Enviar la solicitud al proceso principal con los filtros correspondientes
+      if (filtroFolioD !== null) {
+        ipcRenderer.send('getFoliosDisponibles', page, pageSize, filtroFolioD);
+      }else {
+        ipcRenderer.send('getFoliosDisponibles', page, pageSize);
+      }
+    },
+
   receiveFolios: (callback) => {
-      ipcRenderer.on('receiveFolios', (event, folios) => callback(folios));
+    // Si el listener ya está establecido, eliminamos el listener anterior
+    if (expedientesListenerSet) {
+      ipcRenderer.removeAllListeners('receiveFolios');
+    }
+    // Agregamos el listener con una función anónima para poder eliminarlo correctamente
+    ipcRenderer.on('receiveFolios', (event, folios) => {
+      expedientesListenerSet = true; // Establecer la bandera
+      callback(folios);
+    });
   },
-  //Funciones para listar expedientes expedientes por depurar.
-  sendGetExpedientesDepurar: () => ipcRenderer.send('getExpedientesDepurar'),
-  receiveExpedientesDepurar: (callback) => {
-      ipcRenderer.on('receiveExpedientesDepurar', (event, expedientes) => callback(expedientes));
+
+  /////////////-------INSERCIÓN DE EXPEDIENTES-------/////////////
+  createExp: (expediente) => ipcRenderer.send('createExp', expediente),
+
+  listenExpInsertedSuccessfully: (callback) => {
+    ipcRenderer.on('expInsertedSuccessfully', callback);
   },
+  listenExpInsertError: (callback) => {
+    ipcRenderer.on('expInsertError', callback);
+  },
+ 
+  /////////////-------ACTUALIZACIÓN DE EXPEDIENTES-------/////////////
   //Funciones para actualizar
   sendGetExpedienteById: (idExpediente) => ipcRenderer.send('getExpedienteById', idExpediente),
   receiveExpedienteById: (callback) => {
@@ -75,6 +78,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listenExpUpdateError: (callback) => {
     ipcRenderer.on('expUpdateError', callback);
   },
+
+  /////////////-------ELIMINACIÓN DE EXPEDIENTES-------/////////////
   //Funciones para eliminar expedientes.
   deleteExp: (idExpedienteD) => ipcRenderer.send('deleteExp', idExpedienteD),
 
@@ -93,7 +98,26 @@ contextBridge.exposeInMainWorld('electronAPI', {
   listenExpDeleteErrorD: (callback) => {
     ipcRenderer.on('expDeleteErrorD', callback);
   },
+
+  /////////////-------DEPURACIÓN MASIVA DE EXPEDIENTES-------/////////////
   //Funciones para eliminar expedientes.
+  //Funciones para listar expedientes expedientes por depurar.
+  sendGetExpedientesDepurar: (page,pageSize,filtroFolioDep) =>{
+    if(filtroFolioDep){
+      ipcRenderer.send('getExpedientesDepurar',page,pageSize,filtroFolioDep);
+    }else{
+      ipcRenderer.send('getExpedientesDepurar',page,pageSize);
+    }
+  },
+  receiveExpedientesDepurar: (callback) => {
+    if (expedientesListenerSet) {
+      ipcRenderer.removeAllListeners('receiveExpedientesDepurar');
+    }
+    ipcRenderer.on('receiveExpedientesDepurar', (event,data) =>{
+      expedientesListenerSet = true; // Establecer la bandera
+      callback(data);
+    });
+  },
   depurarExp: () => ipcRenderer.send('depurarExp'),
 
   listenExpDepuradoSuccessfully: (callback) => {
@@ -101,5 +125,36 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   listenExpDepuradoError: (callback) => {
     ipcRenderer.on('expDepuradoError', callback);
-  }
+  },
+
+  /////////////-------FILTROS DE BUSQUEDA-------/////////////
+  // Función para enviar la solicitud de búsqueda de folios al backend
+  sendSearchFolios: (busquedaFolioD, page, pageSize) => {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchFolios', busquedaFolioD, page, pageSize);
+  },
+  sendSearchNombres:(busquedaNombre, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchNombres', busquedaNombre, page, pageSize);
+  },
+  sendSearchEdad:(busquedaEdad, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchEdad', busquedaEdad, page, pageSize);
+  },
+  sendSearchDireccion:(busquedaDireccion, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchDireccion', busquedaDireccion, page, pageSize);
+  },
+  sendSearchNumA:(busquedaNumA, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchNumA', busquedaNumA, page, pageSize);
+  },
+  sendSearchCurp:(busquedaCurp, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchCurp', busquedaCurp, page, pageSize);
+  },
+  sendSearchCiudad:(busquedaCiudad, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchCiudad', busquedaCiudad, page, pageSize);
+  },
 });

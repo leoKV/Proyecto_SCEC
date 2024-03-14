@@ -1,0 +1,30 @@
+#help{
+    font-family:'Arial', sans-serif;
+    text-align: center;
+    font-size: 45px;
+}
+
+.pA{
+    font-family:'Arial', sans-serif;
+    font-size: 23px;
+    padding-left: 10px;
+}
+
+#accordion{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.btn{
+    font-family:'Arial', sans-serif;
+    font-size: 20px;
+    color: white;
+}
+
+.card-header{
+    background-color:#2ed573;
+}
+
+.card-body{
+    background-color: #dfe6e9;
+}
