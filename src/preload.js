@@ -8,17 +8,58 @@ contextBridge.exposeInMainWorld('electronAPI', {
   remote: remote,
   /////////////-------LISTAR TODOS LOS EXPEDIENTES-------/////////////
   // Funciones para listar expedientes.
-  sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion) => {
-  // Enviar la solicitud al proceso principal con los filtros correspondientes
-    if (filtroFolio !== null && filtroAfiliacion !== null) {
-      ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion);
-    } else if (filtroFolio !== null) {
-      ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio);
-    } else if (filtroAfiliacion !== null) {
-      ipcRenderer.send('getExpedientes', page, pageSize, filtroAfiliacion);
-    } else {
-      ipcRenderer.send('getExpedientes', page, pageSize);
-    }
+  // sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion,filtroTarjeta,filtroReposicionT) => {
+  //   // Enviar la solicitud al proceso principal con los filtros correspondientes
+  //   if (filtroFolio && filtroAfiliacion) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion);
+  //   } else if (filtroFolio && !filtroAfiliacion) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, null); // Enviar null para filtroAfiliacion
+  //   } else if (filtroAfiliacion && !filtroFolio) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, null, filtroAfiliacion); // Enviar null para filtroFolio
+  //   } else {
+  //       ipcRenderer.send('getExpedientes', page, pageSize); // No hay filtros, enviar solicitud sin filtros adicionales
+  //   }
+  // },
+  // sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion, filtroTarjeta, filtroReposicionT) => {
+  //   // Enviar la solicitud al proceso principal con los filtros correspondientes
+  //   if (filtroFolio && filtroAfiliacion && filtroTarjeta && filtroReposicionT) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion, filtroTarjeta, filtroReposicionT);
+  //   } else if (filtroFolio && filtroAfiliacion && filtroTarjeta) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion, filtroTarjeta, null);
+  //   } else if (filtroFolio && filtroAfiliacion && filtroReposicionT) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion, null, filtroReposicionT);
+  //   } else if (filtroFolio && filtroAfiliacion) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion, null, null);
+  //   } else if (filtroFolio && filtroTarjeta && filtroReposicionT) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, null, filtroTarjeta, filtroReposicionT);
+  //   } else if (filtroFolio && filtroTarjeta) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, null, filtroTarjeta, null);
+  //   } else if (filtroFolio && filtroReposicionT) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, null, null, filtroReposicionT);
+  //   } else if (filtroFolio) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, null, null, null);
+  //   } else if (filtroAfiliacion && filtroTarjeta && filtroReposicionT) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, null, filtroAfiliacion, filtroTarjeta, filtroReposicionT);
+  //   } else if (filtroAfiliacion && filtroTarjeta) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, null, filtroAfiliacion, filtroTarjeta, null);
+  //   } else if (filtroAfiliacion && filtroReposicionT) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, null, filtroAfiliacion, null, filtroReposicionT);
+  //   } else if (filtroAfiliacion) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, null, filtroAfiliacion, null, null);
+  //   } else if (filtroTarjeta && filtroReposicionT) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, null, null, filtroTarjeta, filtroReposicionT);
+  //   } else if (filtroTarjeta) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, null, null, filtroTarjeta, null);
+  //   } else if (filtroReposicionT) {
+  //       ipcRenderer.send('getExpedientes', page, pageSize, null, null, null, filtroReposicionT);
+  //   } else {
+  //       ipcRenderer.send('getExpedientes', page, pageSize); // No hay filtros, enviar solicitud sin filtros adicionales
+  //   }
+  // },
+
+  sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion, filtroTarjeta, filtroReposicionT) => {
+    const filtros = [filtroFolio, filtroAfiliacion, filtroTarjeta, filtroReposicionT];
+    ipcRenderer.send('getExpedientes', page, pageSize, ...filtros);
   },
   receiveExpedientes: (callback) => {
     // Si el listener ya está establecido, eliminamos el listener anterior
@@ -133,28 +174,63 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
     ipcRenderer.send('searchFolios', busquedaFolioD, page, pageSize);
   },
+  //Nombres.
   sendSearchNombres:(busquedaNombre, page, pageSize)=> {
     // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
     ipcRenderer.send('searchNombres', busquedaNombre, page, pageSize);
   },
+  sendSearchNombresDep:(busquedaNombreD, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchNombresD', busquedaNombreD, page, pageSize);
+  },
+
+  //Edad.
   sendSearchEdad:(busquedaEdad, page, pageSize)=> {
     // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
     ipcRenderer.send('searchEdad', busquedaEdad, page, pageSize);
   },
+  sendSearchEdadDep:(busquedaEdadD, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchEdadD', busquedaEdadD, page, pageSize);
+  },
+
+  //Dirección.
   sendSearchDireccion:(busquedaDireccion, page, pageSize)=> {
     // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
     ipcRenderer.send('searchDireccion', busquedaDireccion, page, pageSize);
   },
+  sendSearchDireccionDep:(busquedaDireccionD, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchDireccionD', busquedaDireccionD, page, pageSize);
+  },
+
+  //Número de afiliación.
   sendSearchNumA:(busquedaNumA, page, pageSize)=> {
     // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
     ipcRenderer.send('searchNumA', busquedaNumA, page, pageSize);
   },
+  sendSearchNumADep:(busquedaNumAD, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchNumAD', busquedaNumAD, page, pageSize);
+  },
+
+  //Curp.
   sendSearchCurp:(busquedaCurp, page, pageSize)=> {
     // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
     ipcRenderer.send('searchCurp', busquedaCurp, page, pageSize);
   },
+  sendSearchCurpDep:(busquedaCurpD, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchCurpD', busquedaCurpD, page, pageSize);
+  },
+
+  //Ciudad.
   sendSearchCiudad:(busquedaCiudad, page, pageSize)=> {
     // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
     ipcRenderer.send('searchCiudad', busquedaCiudad, page, pageSize);
+  },
+  sendSearchCiudadDep:(busquedaCiudadD, page, pageSize)=> {
+    // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
+    ipcRenderer.send('searchCiudadD', busquedaCiudadD, page, pageSize);
   },
 });

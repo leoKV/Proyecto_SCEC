@@ -94,9 +94,9 @@ h1#exp{
     margin: auto; /* Centrar el modal horizontalmente */
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1700px) {
     .modal-super .modal-dialog {
-        max-width: 1880px; /* Ancho máximo personalizado para dispositivos grandes */
+        max-width: 2200px; /* Ancho máximo personalizado para dispositivos grandes */
     }
 }
 
@@ -105,7 +105,7 @@ h1#exp{
     color: white;
 }
 
-#mydatatable,#mydatatableFolios{
+#mydatatable,#mydatatableFolios,#mydatatableDepurar{
     font-size: 15px;
     font-family: 'Arial', sans-serif;;
 }

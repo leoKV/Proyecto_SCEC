@@ -116,32 +116,36 @@
                       <option value="Z">Z</option>
                   </select>
                   </th>
-                  <th><input type="text" id="filtroNombreF" placeholder="Buscar..." style="text-transform: uppercase;display: none;"></th>
+                  <th><input type="text" id="filtroNombreF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
                   <th><input type="text" id="filtroEdadF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
                   <th><input type="text" id="filtroDireccionF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
                   <th>
-                    <select id="filtroAfiliacion" class="form-select" style="display: none;">
+                    <select id="filtroAfiliacion" class="form-select">
                       <option value="">Todas</option>
                       <option value="NINGUNA">NINGUNA</option>
                       <option value="ISSSTE">ISSSTE</option>
                       <option value="IMSS">IMSS</option>
                       <option value="OTRO">OTRO</option>
-                  </select>
+                    </select>
                   </th>
                   <th><input type="text" id="filtroNumAfiliacionF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
                   <th><input type="text" id="filtroCURPF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th></th>
                   <th>
-
+                    <select id="filtroTarjeta" class="form-select">
+                      <option value="">Todas</option>
+                      <option value="SI">SI</option>
+                      <option value="NO">NO</option>
+                    </select>
                   </th>
                   <th>
-
+                    <select id="filtroReposicionT" class="form-select">
+                      <option value="">Todas</option>
+                      <option value="SI">SI</option>
+                      <option value="NO">NO</option>
+                    </select>
                   </th>
-                  <th>
-
-                  </th>
-                  <th>
-
-                  </th>
+                  <th></th>
                   <th><input type="text" id="filtroCiudadNacimientoF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
               </tr>
               </tfoot>
@@ -558,21 +562,65 @@
                           </th>
                           <th style="vertical-align:top;">
                             Nombre
+                            <br>
+                            <input type="text" id="filtroNombreDep" placeholder="Buscar..." style="text-transform: uppercase;">
                           </th>
-                          <th style="vertical-align:top;">Edad</th>
-                          <th style="vertical-align:top;">Dirección</th>
+                          <th style="vertical-align:top;">
+                            Edad
+                            <br>
+                            <input type="text" id="filtroEdadDep" placeholder="Buscar..." style="text-transform: uppercase;">
+                          </th>
+                          <th style="vertical-align:top;">
+                            Dirección
+                            <br>
+                            <input type="text" id="filtroDireccionDep" placeholder="Buscar..." style="text-transform: uppercase;">
+                          </th>
                           <th style="vertical-align:top;">
                             Afiliación
+                            <br>
+                            <select id="filtroAfiliacionDep" class="form-select">
+                              <option value="">Todas</option>
+                              <option value="NINGUNA">NINGUNA</option>
+                              <option value="ISSSTE">ISSSTE</option>
+                              <option value="IMSS">IMSS</option>
+                              <option value="OTRO">OTRO</option>
+                            </select>
                           </th>
-                          <th style="vertical-align:top;">No.Afiliación</th>
+                          <th style="vertical-align:top;">
+                            No.Afiliación
+                            <br>
+                            <input type="text" id="filtroNumAfiliacionDep" placeholder="Buscar..." style="text-transform: uppercase;">
+                          </th>
                           <th style="vertical-align:top;">
                             CURP
+                            <br>
+                            <input type="text" id="filtroCURPDep" placeholder="Buscar..." style="text-transform: uppercase;">
                           </th>
                           <th style="vertical-align:top;">Fecha de ingreso</th>
-                          <th style="vertical-align:top;">Tarjeta</th>
-                          <th style="vertical-align:top;">Reposición</th>
+                          <th style="vertical-align:top;">
+                            Tarjeta
+                            <br>
+                            <select id="filtroTarjetaDep" class="form-select">
+                              <option value="">Todas</option>
+                              <option value="SI">SI</option>
+                              <option value="NO">NO</option>
+                            </select>
+                          </th>
+                          <th style="vertical-align:top;">
+                            Reposición
+                            <br>
+                            <select id="filtroReposicionTDep" class="form-select">
+                              <option value="">Todas</option>
+                              <option value="SI">SI</option>
+                              <option value="NO">NO</option>
+                            </select>
+                          </th>
                           <th style="vertical-align:top;">Fecha de nacimiento</th>
-                          <th style="vertical-align:top;">Ciudad de nacimiento</th>
+                          <th style="vertical-align:top;">
+                            Ciudad de nacimiento
+                            <br>
+                            <input type="text" id="filtroCiudadNacimientoDep" placeholder="Buscar..." style="text-transform: uppercase;">
+                          </th>
                           <th style="vertical-align:top;">Acciones</th>
                         </tr>
                     </thead>
