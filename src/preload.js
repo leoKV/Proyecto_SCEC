@@ -57,8 +57,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   //   }
   // },
 
-  sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion, filtroTarjeta, filtroReposicionT) => {
-    const filtros = [filtroFolio, filtroAfiliacion, filtroTarjeta, filtroReposicionT];
+  sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion, filtroTarjeta,filtroReposicionT,filtroFechaIngresoY,filtroFechaIngresoM,filtroFechaIngresoD,filtroFechaNacimientoY,filtroFechaNacimientoM,filtroFechaNacimientoD) => {
+    const filtros = [filtroFolio, filtroAfiliacion, filtroTarjeta, filtroReposicionT,filtroFechaIngresoY,filtroFechaIngresoM,filtroFechaIngresoD,filtroFechaNacimientoY,filtroFechaNacimientoM,filtroFechaNacimientoD];
     ipcRenderer.send('getExpedientes', page, pageSize, ...filtros);
   },
   receiveExpedientes: (callback) => {
@@ -143,12 +143,16 @@ contextBridge.exposeInMainWorld('electronAPI', {
   /////////////-------DEPURACIÓN MASIVA DE EXPEDIENTES-------/////////////
   //Funciones para eliminar expedientes.
   //Funciones para listar expedientes expedientes por depurar.
-  sendGetExpedientesDepurar: (page,pageSize,filtroFolioDep) =>{
-    if(filtroFolioDep){
-      ipcRenderer.send('getExpedientesDepurar',page,pageSize,filtroFolioDep);
-    }else{
-      ipcRenderer.send('getExpedientesDepurar',page,pageSize);
-    }
+  // sendGetExpedientesDepurar: (page,pageSize,filtroFolioDep) =>{
+  //   if(filtroFolioDep){
+  //     ipcRenderer.send('getExpedientesDepurar',page,pageSize,filtroFolioDep);
+  //   }else{
+  //     ipcRenderer.send('getExpedientesDepurar',page,pageSize);
+  //   }
+  // },
+  sendGetExpedientesDepurar: (page, pageSize, filtroFolioDep, filtroAfiliacionDep, filtroTarjetaDep, filtroReposicionTDep) => {
+    const filtrosDep = [filtroFolioDep, filtroAfiliacionDep, filtroTarjetaDep, filtroReposicionTDep];
+    ipcRenderer.send('getExpedientesDepurar', page, pageSize, ...filtrosDep);
   },
   receiveExpedientesDepurar: (callback) => {
     if (expedientesListenerSet) {

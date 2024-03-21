@@ -107,5 +107,17 @@ h1#exp{
 
 #mydatatable,#mydatatableFolios,#mydatatableDepurar{
     font-size: 15px;
-    font-family: 'Arial', sans-serif;;
+    font-family: 'Arial', sans-serif;
+}
+#btnFechaI,#btnFechaN{
+    color: black;
+    font-family: 'Arial', sans-serif;
+    font-size: 15px;
+}
+
+.fP{
+    color: black;
+    font-family: 'Arial', sans-serif;
+    font-size: 15px;
+    text-align: center;
 }

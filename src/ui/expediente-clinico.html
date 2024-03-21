@@ -116,9 +116,9 @@
                       <option value="Z">Z</option>
                   </select>
                   </th>
-                  <th><input type="text" id="filtroNombreF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
-                  <th><input type="text" id="filtroEdadF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
-                  <th><input type="text" id="filtroDireccionF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th><input type="text" id="filtroNombreF" class="form-control" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th><input type="text" id="filtroEdadF" class="form-control" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th><input type="text" id="filtroDireccionF" class="form-control" placeholder="Buscar..." style="text-transform: uppercase;"></th>
                   <th>
                     <select id="filtroAfiliacion" class="form-select">
                       <option value="">Todas</option>
@@ -128,9 +128,32 @@
                       <option value="OTRO">OTRO</option>
                     </select>
                   </th>
-                  <th><input type="text" id="filtroNumAfiliacionF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
-                  <th><input type="text" id="filtroCURPF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
-                  <th></th>
+                  <th><input type="text" id="filtroNumAfiliacionF" class="form-control" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th><input type="text" id="filtroCURPF" class="form-control" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th>
+                    <div class="btn-group">
+                      <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filtrar...
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <select id="filtroFechaIngresoY" class="form-control">
+                            <option value="">Años</option>
+                          </select>
+                        </li>
+                        <li>
+                          <select id="filtroFechaIngresoM" class="form-control">
+                            <option value="">Meses</option>
+                          </select>
+                        </li>
+                        <li>
+                          <select id="filtroFechaIngresoD" class="form-control">
+                            <option value="">Días</option>
+                          </select>
+                        </li>
+                      </ul>
+                    </div>
+                  </th>
                   <th>
                     <select id="filtroTarjeta" class="form-select">
                       <option value="">Todas</option>
@@ -145,8 +168,31 @@
                       <option value="NO">NO</option>
                     </select>
                   </th>
-                  <th></th>
-                  <th><input type="text" id="filtroCiudadNacimientoF" placeholder="Buscar..." style="text-transform: uppercase;"></th>
+                  <th>
+                    <div class="btn-group">
+                      <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filtrar...
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <select id="filtroFechaNacimientoY" class="form-control">
+                            <option value="">Años</option>
+                          </select>
+                        </li>
+                        <li>
+                          <select id="filtroFechaNacimientoM" class="form-control">
+                            <option value="">Meses</option>
+                          </select>
+                        </li>
+                        <li>
+                          <select id="filtroFechaNacimientoD" class="form-control">
+                            <option value="">Días</option>
+                          </select>
+                        </li>
+                      </ul>
+                    </div>
+                  </th>
+                  <th><input type="text" id="filtroCiudadNacimientoF" class="form-control" placeholder="Buscar..." style="text-transform: uppercase;"></th>
               </tr>
               </tfoot>
               <tbody id="expedientes-tbody">

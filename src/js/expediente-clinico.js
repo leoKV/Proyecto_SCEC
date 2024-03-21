@@ -15,11 +15,53 @@ const { remote } = window.electronAPI;
 
 //Tabla principal de expedientes clínicos.
 $(document).ready(function() {
+     //Obtener año actual.
+     var currentYear = new Date().getFullYear();
+     //Generando opciones para fecha de ingreso.
+     //Generar opciones de años desde la fecha de ingreso más antigua 1988 hasta el año actual.
+     for (var yearI = currentYear; yearI >= 1988; yearI--) {
+         $('#filtroFechaIngresoY').append($('<option>', {
+             value: yearI,
+             text: yearI
+         }));
+     }
+     for (var monthI = 1; monthI <= 12; monthI++) {
+        $('#filtroFechaIngresoM').append($('<option>', {
+            value: monthI,
+            text: monthI,
+        }));
+    }
+    for (var dayI = 1; dayI <= 31; dayI++) {
+        $('#filtroFechaIngresoD').append($('<option>', {
+            value: dayI,
+            text: dayI,
+        }));
+    }
+    //Generando opciones para fecha de nacimiento.
+    for (var yearN = currentYear; yearN >= 1900; yearN--) {
+        $('#filtroFechaNacimientoY').append($('<option>', {
+            value: yearN,
+            text: yearN
+        }));
+    }
+    for (var monthN = 1; monthN <= 12; monthN++) {
+        $('#filtroFechaNacimientoM').append($('<option>', {
+            value: monthN,
+            text: monthN,
+        }));
+    }
+    for (var dayN = 1; dayN <= 31; dayN++) {
+        $('#filtroFechaNacimientoD').append($('<option>', {
+            value: dayN,
+            text: dayN,
+        }));
+    }
+
     var table = $('#mydatatable').DataTable({
         "serverSide": true,
         "processing": true,
+        "searching": false,
         "ajax": function (data, callback, settings) {
-           
             // Calcular la página actual y el tamaño de página
             const page = settings._iDisplayStart / settings._iDisplayLength + 1;
             const pageSize = settings._iDisplayLength;
@@ -27,13 +69,39 @@ $(document).ready(function() {
             let filtroAfiliacion = $('#filtroAfiliacion').val();
             let filtroTarjeta = $('#filtroTarjeta').val();
             let filtroReposicionT = $('#filtroReposicionT').val();
+            //Fecha Ingreso desglozada.
+            //Año
+            let filtroFechaIngresoY = $('#filtroFechaIngresoY').val();
+            //Mes
+            let filtroFechaIngresoM = $('#filtroFechaIngresoM').val();
+            //Día
+            let filtroFechaIngresoD = $('#filtroFechaIngresoD').val();
+
+            //Fecha Nacimiento desglozada.
+            //Año
+            let filtroFechaNacimientoY = $('#filtroFechaNacimientoY').val();
+            //Mes
+            let filtroFechaNacimientoM = $('#filtroFechaNacimientoM').val();
+            //Día
+            let filtroFechaNacimientoD = $('#filtroFechaNacimientoD').val();
             // Verificar si se ha seleccionado una letra en el filtro
             if (!filtroFolio) filtroFolio = null;
             if (!filtroAfiliacion) filtroAfiliacion = null;
             if (!filtroTarjeta) filtroTarjeta = null;
             if (!filtroReposicionT) filtroReposicionT = null;
+            //Verificación de fecha de ingreso.
+            if (!filtroFechaIngresoY) filtroFechaIngresoY = null;
+            if (!filtroFechaIngresoM) filtroFechaIngresoM = null;
+            if (!filtroFechaIngresoD) filtroFechaIngresoD = null;
+            //Verificación de fecha de nacimiento.
+            if (!filtroFechaNacimientoY) filtroFechaNacimientoY = null;
+            if (!filtroFechaNacimientoM) filtroFechaNacimientoM = null;
+            if (!filtroFechaNacimientoD) filtroFechaNacimientoD = null;
             // Enviar solicitud al backend para obtener los datos de la página actual
-            window.electronAPI.sendGetExpedientes(page, pageSize,filtroFolio,filtroAfiliacion,filtroTarjeta,filtroReposicionT);
+            window.electronAPI.sendGetExpedientes(page, pageSize,filtroFolio,filtroAfiliacion,filtroTarjeta,
+                                                  filtroReposicionT,filtroFechaIngresoY,filtroFechaIngresoM,
+                                                  filtroFechaIngresoD,filtroFechaNacimientoY,filtroFechaNacimientoM,
+                                                  filtroFechaNacimientoD);
             // Actualizar la tabla con los datos recibidos del backend
             window.electronAPI.receiveExpedientes((expedientes) => {
                 // Formatear las fechas y generar las opciones HTML
@@ -207,6 +275,21 @@ $(document).ready(function() {
     $('#filtroTarjeta').on('change', function() {table.ajax.reload();});
     // Agregar un listener para el evento de cambio en el filtro de reposición de tarjeta.
     $('#filtroReposicionT').on('change', function() {table.ajax.reload();});
+    // Manejo de filtros de año en fecha de ingreso
+    //Año
+    $('#filtroFechaIngresoY').on('change', function() {table.ajax.reload();});
+    //Mes
+    $('#filtroFechaIngresoM').on('change', function() {table.ajax.reload();});
+    //Día
+    $('#filtroFechaIngresoD').on('change', function() {table.ajax.reload();});
+
+    // Manejo de filtros de año en fecha de nacimiento
+    //Año
+    $('#filtroFechaNacimientoY').on('change', function() {table.ajax.reload();});
+    //Mes
+    $('#filtroFechaNacimientoM').on('change', function() {table.ajax.reload();});
+    //Día
+    $('#filtroFechaNacimientoD').on('change', function() {table.ajax.reload();});
 
     $('#filtroNombreF').on('keyup', function() {
         let busquedaNombre = $(this).val().toUpperCase();
@@ -268,6 +351,7 @@ $(document).ready(function() {
     var tableFolios= $('#mydatatableFolios').DataTable({
         "serverSide": true,
         "processing": true,
+        "searching": false,
         "ajax": function (data, callback, settings) {
             // Calcular la página actual y el tamaño de página
             const page = settings._iDisplayStart / settings._iDisplayLength + 1;
@@ -340,19 +424,23 @@ $(document).ready(function() {
         tableDepurar= $('#mydatatableDepurar').DataTable({
             "serverSide": true,
             "processing": true,
+            "searching": false,
             "ajax": function (data, callback, settings) {
                 // Calcular la página actual y el tamaño de página
                 const page = settings._iDisplayStart / settings._iDisplayLength + 1;
                 const pageSize = settings._iDisplayLength;
-                let filtroFolioDep = $('#filtroFolioDep').val(); // Obtener el valor del filtro de folio
-                // Verificar si se ha seleccionado una letra en el filtro
-                if (!filtroFolioDep) {
-                    // Si no se ha seleccionado ninguna letra, establecer filtroFolioDep como null
-                    filtroFolioDep = null;
-                }
+                let filtroFolioDep = $('#filtroFolioDep').val();
+                let filtroAfiliacionDep = $('#filtroAfiliacionDep').val();
+                let filtroTarjetaDep = $('#filtroTarjetaDep').val();
+                let filtroReposicionTDep = $('#filtroReposicionTDep').val();
+                // Verificaciones de filtros.
+                if (!filtroFolioDep) filtroFolioDep = null;
+                if (!filtroAfiliacionDep) filtroAfiliacionDep = null;
+                if (!filtroTarjetaDep) filtroTarjetaDep = null;
+                if (!filtroReposicionTDep) filtroReposicionTDep = null;
              
                 // Enviar solicitud al backend para obtener los datos de la página actual
-                window.electronAPI.sendGetExpedientesDepurar(page, pageSize,filtroFolioDep);
+                window.electronAPI.sendGetExpedientesDepurar(page, pageSize,filtroFolioDep,filtroAfiliacionDep,filtroTarjetaDep,filtroReposicionTDep);
                 // Actualizar la tabla con los datos recibidos del backend
                 window.electronAPI.receiveExpedientesDepurar((expedientes) => {
                     // Formatear las fechas y generar las opciones HTML
@@ -471,7 +559,13 @@ $(document).ready(function() {
     //Filtros de busqueda
     $("#modalDepurar").on("shown.bs.modal", function() {
         $("#filtroNombreDep").val(""); // Limpiar el valor del buscador
+        $("#filtroEdadDep").val(""); // Limpiar el valor del buscador
+        $("#filtroDireccionDep").val(""); // Limpiar el valor del buscador
+        $("#filtroNumAfiliacionDep").val(""); // Limpiar el valor del buscador
+        $("#filtroCURPDep").val(""); // Limpiar el valor del buscador
+        $("#filtroCiudadNacimientoDep").val(""); // Limpiar el valor del buscador
     });
+
     $('#filtroNombreDep').on('keyup', function() {
         let busquedaNombreD = $(this).val().toUpperCase();
         let table = $('#mydatatableDepurar').DataTable();

@@ -21,251 +21,6 @@ function createWindow() {
 }
 /////////////-------LISTAR TODOS LOS EXPEDIENTES-------/////////////
 //Función para listar todos los expedientes:
-// ipcMain.on('getExpedientes', async (event, page, pageSize, filtroFolio, filtroAfiliacion) => {
-//     try {
-//         const conn = await getConnection();
-//         const offset = (page - 1) * pageSize;
-//         let query = 'SELECT * FROM expediente';
-//         let queryParams = []; // Arreglo para almacenar los parámetros de la consulta
-
-//         // Verificar si se proporciona una letra de folio para filtrar
-//         if (filtroFolio && filtroAfiliacion) {
-//             query += ' WHERE folio LIKE ? AND afiliacion = ?';
-//             filtroFolio += '%'; // Añadir '%' para que busque todas las combinaciones de la letra
-//             queryParams.push(filtroFolio, filtroAfiliacion); // Agregar los parámetros de filtro a la lista
-//         } else if (filtroAfiliacion) {
-//             query += ' WHERE afiliacion = ?';
-//             queryParams.push(filtroAfiliacion); // Agregar el parámetro de filtro a la lista
-//         } else if (filtroFolio) {
-//             query += ' WHERE folio LIKE ?';
-//             filtroFolio += '%'; // Añadir '%' para que busque todas las combinaciones de la letra
-//             queryParams.push(filtroFolio); // Agregar el parámetro de filtro a la lista
-//         }
-
-//         query += ' LIMIT ? OFFSET ?';
-//         queryParams.push(pageSize, offset); // Añadir el tamaño de página y el desplazamiento a los parámetros de la consulta
-
-//         const result = await conn.query(query, queryParams);
-
-//         // Obtener el número total de registros sin aplicar ningún filtro
-//         let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
-
-//         if (filtroFolio && filtroAfiliacion) {
-//             totalCountQuery += ' WHERE folio LIKE ? AND afiliacion = ?';
-//         } else if (filtroAfiliacion) {
-//             totalCountQuery += ' WHERE afiliacion = ?';
-//         } else if (filtroFolio) {
-//             totalCountQuery += ' WHERE folio LIKE ?';
-//         }
-
-//         const totalCount = await conn.query(totalCountQuery, queryParams);
-//         const totalRecords = totalCount[0][0].total;
-
-//         event.reply('receiveExpedientes', { 
-//             totalRecords: totalRecords,
-//             filteredRecords: totalRecords, // En este caso, no aplicamos filtros, por lo que el total y el filtrado son iguales
-//             data: result[0] 
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         event.reply('receiveExpedientes', { 
-//             totalRecords: 0,
-//             filteredRecords: 0,
-//             data: []
-//         });
-//     }
-// });
-
-
-// ipcMain.on('getExpedientes', async (event, page, pageSize, filtroFolio, filtroAfiliacion,filtroTarjeta,filtroReposicionT) => {
-//     try {
-//         const conn = await getConnection();
-//         const offset = (page - 1) * pageSize;
-//         let query = 'SELECT * FROM expediente';
-//         let queryParams = []; // Arreglo para almacenar los parámetros de la consulta
-
-//         // Verificar si se proporciona una letra de folio para filtrar
-//         if (filtroFolio && filtroAfiliacion) {
-//             query += ' WHERE folio LIKE ? AND afiliacion = ?';
-//             filtroFolio += '%'; // Añadir '%' para que busque todas las combinaciones de la letra
-//             queryParams.push(filtroFolio, filtroAfiliacion); // Agregar los parámetros de filtro a la lista
-//         } else if (filtroAfiliacion) {
-//             query += ' WHERE afiliacion = ?';
-//             queryParams.push(filtroAfiliacion); // Agregar el parámetro de filtro a la lista
-//         } else if (filtroFolio) {
-//             query += ' WHERE folio LIKE ?';
-//             filtroFolio += '%'; // Añadir '%' para que busque todas las combinaciones de la letra
-//             queryParams.push(filtroFolio); // Agregar el parámetro de filtro a la lista
-//         }
-
-//         query += ' LIMIT ? OFFSET ?';
-//         queryParams.push(pageSize, offset); // Añadir el tamaño de página y el desplazamiento a los parámetros de la consulta
-
-//         const result = await conn.query(query, queryParams);
-
-//         // Obtener el número total de registros sin aplicar ningún filtro
-//         let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
-
-//         if (filtroFolio && filtroAfiliacion) {
-//             totalCountQuery += ' WHERE folio LIKE ? AND afiliacion = ?';
-//         } else if (filtroAfiliacion) {
-//             totalCountQuery += ' WHERE afiliacion = ?';
-//         } else if (filtroFolio) {
-//             totalCountQuery += ' WHERE folio LIKE ?';
-//         }
-
-//         const totalCount = await conn.query(totalCountQuery, queryParams);
-//         const totalRecords = totalCount[0][0].total;
-
-//         event.reply('receiveExpedientes', { 
-//             totalRecords: totalRecords,
-//             filteredRecords: totalRecords, // En este caso, no aplicamos filtros, por lo que el total y el filtrado son iguales
-//             data: result[0] 
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         event.reply('receiveExpedientes', { 
-//             totalRecords: 0,
-//             filteredRecords: 0,
-//             data: []
-//         });
-//     }
-// });
-
-// ipcMain.on('getExpedientes', async (event, page, pageSize,...filtros) => {
-//     try {
-//         const conn = await getConnection();
-//         const offset = (page - 1) * pageSize;
-//         let query = 'SELECT * FROM expediente';
-//         let queryParams = []; // Arreglo para almacenar los parámetros de la consulta
-
-//         // Verificar si se proporciona una letra de folio para filtrar
-//         if (filtros[0] && filtros[1] && filtros[2] && filtros[3]) {
-//             query += ' WHERE folio LIKE ? AND afiliacion = ? AND tarjeta = ? AND reposicionTarjeta = ?';
-//             filtros[0] += '%';
-//             queryParams.push(filtros[0],filtros[1],filtros[2],filtros[3]);
-
-//         } else if (filtros[0] && filtros[1] && filtros[2]) {
-//             query += ' WHERE folio LIKE ? AND afiliacion = ? AND tarjeta = ?';
-//             filtros[0] += '%';
-//             queryParams.push(filtros[0],filtros[1],filtros[2]);
-
-//         } else if (filtros[0] && filtros[1] && filtros[3]) {
-//             query += ' WHERE folio LIKE ? AND afiliacion = ? AND reposicionTarjeta = ?';
-//             filtros[0] += '%';
-//             queryParams.push(filtros[0],filtros[1],filtros[3]);
-
-//         } else if (filtros[0] && filtros[1]) {
-//             query += ' WHERE folio LIKE ? AND afiliacion = ?';
-//             filtros[0] += '%';
-//             queryParams.push(filtros[0],filtros[1]);
-
-//         } else if (filtros[0] && filtros[2] && filtros[3]) {
-//             query += ' WHERE folio LIKE ? AND tarjeta = ? AND reposicionTarjeta = ?';
-//             filtros[0] += '%';
-//             queryParams.push(filtros[0],filtros[2],filtros[3]);
-
-//         } else if (filtros[0] && filtros[2] ) {
-//             query += ' WHERE folio LIKE ? AND tarjeta = ?';
-//             filtros[0] += '%';
-//             queryParams.push(filtros[0],filtros[2]);
-
-//         } else if (filtros[0] && filtros[3]) {
-//             query += ' WHERE folio LIKE ? AND reposicionTarjeta = ?';
-//             filtros[0] += '%';
-//             queryParams.push(filtros[0],filtros[3]);
-
-//         } else if (filtros[0]) {
-//             query += ' WHERE folio LIKE ?';
-//             filtros[0] += '%';
-//             queryParams.push(filtros[0]);
-
-//         } else if (filtros[1] && filtros[2] && filtros[3]) {
-//             query += ' WHERE afiliacion = ? AND tarjeta = ? AND reposicionTarjeta = ?';
-//             queryParams.push(filtros[1],filtros[2],filtros[3]);
-
-//         } else if (filtros[1] && filtros[2]) {
-//             query += ' WHERE afiliacion = ? AND tarjeta = ?';
-//             queryParams.push(filtros[1],filtros[2]);
-
-//         } else if (filtros[1] && filtros[3]) {
-//             query += ' WHERE afiliacion = ? AND reposicionTarjeta = ?';
-//             queryParams.push(filtros[1],filtros[3]);
-
-//         } else if (filtros[1]) {
-//             query += ' WHERE afiliacion = ?';
-//             queryParams.push(filtros[1]);
-
-//         } else if (filtros[2] && filtros[3]) {
-//             query += ' WHERE tarjeta = ? AND reposicionTarjeta = ?';
-//             queryParams.push(filtros[2],filtros[3]);
-
-//         } else if (filtros[2]) {
-//             query += ' WHERE tarjeta = ?';
-//             queryParams.push(filtros[2]);
-
-//         } else if (filtros[3]) {
-//             query += ' WHERE reposicionTarjeta = ?';
-//             queryParams.push(filtros[3]);
-//         }
-
-//         query += ' LIMIT ? OFFSET ?';
-//         queryParams.push(pageSize, offset); // Añadir el tamaño de página y el desplazamiento a los parámetros de la consulta
-
-//         const result = await conn.query(query, queryParams);
-
-//         // Obtener el número total de registros sin aplicar ningún filtro
-//         let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
-
-//         if (filtros[0] && filtros[1] && filtros[2] && filtros[3]) {
-//             totalCountQuery += ' WHERE folio LIKE ? AND afiliacion = ? AND tarjeta = ? AND reposicionTarjeta = ?';
-//         } else if (filtros[0] && filtros[1] && filtros[2]) {
-//             totalCountQuery += ' WHERE folio LIKE ? AND afiliacion = ? AND tarjeta = ?';
-//         } else if (filtros[0] && filtros[1] && filtros[3]) {
-//             totalCountQuery += ' WHERE folio LIKE ? AND afiliacion = ? AND reposicionTarjeta = ?';
-//         } else if (filtros[0] && filtros[1]) {
-//             totalCountQuery += ' WHERE folio LIKE ? AND afiliacion = ?';
-//         } else if (filtros[0] && filtros[2] && filtros[3]) {
-//             totalCountQuery += ' WHERE folio LIKE ? AND tarjeta = ? AND reposicionTarjeta = ?';
-//         } else if (filtros[0] && filtros[2] ) {
-//             totalCountQuery += ' WHERE folio LIKE ? AND tarjeta = ?';
-//         } else if (filtros[0] && filtros[3]) {
-//             totalCountQuery += ' WHERE folio LIKE ? AND reposicionTarjeta = ?';
-//         } else if (filtros[0]) {
-//             totalCountQuery += ' WHERE folio LIKE ?';
-//         } else if (filtros[1] && filtros[2] && filtros[3]) {
-//             totalCountQuery += ' WHERE afiliacion = ? AND tarjeta = ? AND reposicionTarjeta = ?';
-//         } else if (filtros[1] && filtros[2]) {
-//             totalCountQuery += ' WHERE afiliacion = ? AND tarjeta = ?';
-//         } else if (filtros[1] && filtros[3]) {
-//             totalCountQuery += ' WHERE afiliacion = ? AND reposicionTarjeta = ?';
-//         } else if (filtros[1]) {
-//             totalCountQuery += ' WHERE afiliacion = ?';
-//         } else if (filtros[2] && filtros[3]) {
-//             totalCountQuery += ' WHERE tarjeta = ? AND reposicionTarjeta = ?';
-//         } else if (filtros[2]) {
-//             totalCountQuery += ' WHERE tarjeta = ?';
-//         } else if (filtros[3]) {
-//             totalCountQuery += ' WHERE reposicionTarjeta = ?';
-//         }
-
-//         const totalCount = await conn.query(totalCountQuery, queryParams);
-//         const totalRecords = totalCount[0][0].total;
-
-//         event.reply('receiveExpedientes', { 
-//             totalRecords: totalRecords,
-//             filteredRecords: totalRecords, // En este caso, no aplicamos filtros, por lo que el total y el filtrado son iguales
-//             data: result[0] 
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         event.reply('receiveExpedientes', { 
-//             totalRecords: 0,
-//             filteredRecords: 0,
-//             data: []
-//         });
-//     }
-// });
 ipcMain.on('getExpedientes', async (event, page, pageSize, ...filtros) => {
     try {
         const conn = await getConnection();
@@ -291,6 +46,30 @@ ipcMain.on('getExpedientes', async (event, page, pageSize, ...filtros) => {
                         break;
                     case 3:
                         whereClauses.push('reposicionTarjeta = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 4:
+                        whereClauses.push('YEAR(fechaIngreso) = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 5:
+                        whereClauses.push('MONTH(fechaIngreso) = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 6:
+                        whereClauses.push('DAY(fechaIngreso) = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 7:
+                        whereClauses.push('YEAR(fechaNacimiento) = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 8:
+                        whereClauses.push('MONTH(fechaNacimiento) = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 9:
+                        whereClauses.push('DAY(fechaNacimiento) = ?');
                         queryParams.push(filtro);
                         break;
                     default:
@@ -332,8 +111,6 @@ ipcMain.on('getExpedientes', async (event, page, pageSize, ...filtros) => {
         });
     }
 });
-
-
 
 /////////////-------LISTAR TODOS LOS FOLIOS DISPONIBLES------/////////////
 ipcMain.on('getFoliosDisponibles', async (event, page, pageSize, filtroFolioD) => {
@@ -409,70 +186,62 @@ ipcMain.on('getExpedienteById', async (event, idExpediente) => {
 
 /////////////-------LISTAR TODOS LOS EXPEDIENTES A DEPURAR------/////////////
 //Función para listar todos los expedintes que se deben depurar
-///////////////
-// ipcMain.on('getExpedientesDepurar', async (event, page, pageSize) => {
-//     try {
-//         const conn = await getConnection();
-//         const offset = (page - 1) * pageSize;
-//         const result = await conn.query('SELECT * FROM expediente WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR) LIMIT ? OFFSET ?', [pageSize, offset]);
-
-//         // Obtener el número total de registros sin aplicar ningún filtro
-//         const totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
-//         const totalCount = await conn.query(totalCountQuery);
-//         const totalRecords = totalCount[0][0].total;
-        
-//         event.reply('receiveExpedientesDepurar', { 
-//             totalRecords: totalRecords,
-//             filteredRecords: totalRecords, // No aplicamos filtros, por lo que el total y el filtrado son iguales
-//             data: result[0]
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         event.reply('receiveExpedientesDepurar', []);
-//     }
-// });
-
-
-
-
-ipcMain.on('getExpedientesDepurar', async (event, page, pageSize,filtroFolioDep) => {
+ipcMain.on('getExpedientesDepurar', async (event, page, pageSize, ...filtrosDep) => {
     try {
         const conn = await getConnection();
         const offset = (page - 1) * pageSize;
-        //const result = await conn.query('SELECT * FROM expediente WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR) LIMIT ? OFFSET ?', [pageSize, offset]);
         let query = 'SELECT * FROM expediente';
+        let queryParams = []; // Arreglo para almacenar los parámetros de la consulta
+        
+        const whereClauses = [];
+        filtrosDep.forEach((filtro, index) => {
+            if (filtro !== null) {
+                switch (index) {
+                    case 0:
+                        whereClauses.push('folio LIKE ?');
+                        queryParams.push(`${filtro}%`);
+                        break;
+                    case 1:
+                        whereClauses.push('afiliacion = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 2:
+                        whereClauses.push('tarjeta = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 3:
+                        whereClauses.push('reposicionTarjeta = ?');
+                        queryParams.push(filtro);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
-        if(filtroFolioDep){
-            query+=' WHERE folio LIKE ? AND fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
-            filtroFolioDep += '%';
+        if (whereClauses.length > 0) {
+            query += ' WHERE ' + whereClauses.join(' AND ');
+            query += ' AND fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
         }else{
-            query+=' WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+            query += ' WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
         }
-
-        query+=' LIMIT ? OFFSET ?';
-
-        let queryParams = [];
-
-        if(filtroFolioDep){
-            queryParams.push(filtroFolioDep);
-        }
-
-        queryParams.push(pageSize,offset);
+        
+        query += ' LIMIT ? OFFSET ?';
+        queryParams.push(pageSize, offset); // Añadir el tamaño de página y el desplazamiento a los parámetros de la consulta
 
         const result = await conn.query(query, queryParams);
 
         // Obtener el número total de registros sin aplicar ningún filtro
         let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
-        
-        // Si se proporciona una letra de folio, ajustar la consulta para contar solo los registros que coinciden con esa letra
-        if (filtroFolioDep) {
-            totalCountQuery += ' WHERE folio LIKE ? AND fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
+
+        if (whereClauses.length > 0) {
+            totalCountQuery += ' WHERE ' + whereClauses.join(' AND ');
+            totalCountQuery += ' AND fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
         }else{
             totalCountQuery += ' WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
         }
-
         
-        const totalCount = await conn.query(totalCountQuery,queryParams);
+        const totalCount = await conn.query(totalCountQuery, queryParams);
         const totalRecords = totalCount[0][0].total;
         
         event.reply('receiveExpedientesDepurar', { 
@@ -489,62 +258,6 @@ ipcMain.on('getExpedientesDepurar', async (event, page, pageSize,filtroFolioDep)
         });
     }
 });
-
-
-//fgdhgdhfghgfjghjghkjhjkhkhjkhjjklkljl
-// ipcMain.on('getExpedientesDepurar', async (event,page,pageSize,filtroFolioD) => {
-//     try {
-//         const conn = await getConnection();
-//         const offset = (page - 1) * pageSize;
-//         let query = 'SELECT * FROM expediente';
-
-//         if (filtroFolioD) {
-//             query += ' WHERE folio LIKE ? AND fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
-//             filtroFolioD += '%'; // Añadir '%' para que busque todas las combinaciones de la letra
-//         } else {
-//             query +=' WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
-//         }
-
-//         query += ' LIMIT ?, ?'; // Cambio en la cláusula LIMIT
-
-//         let queryParams = [];
-
-//         if (filtroFolioD) {
-//             queryParams.push(filtroFolioD);
-//         }
-
-//         queryParams.push(offset, pageSize); // Cambio en los parámetros de la consulta
-
-//         const result = await conn.query(query, queryParams);
-
-//         // Obtener el número total de registros sin aplicar ningún filtro
-//         let totalCountQuery = 'SELECT COUNT(*) AS total FROM expediente';
-
-//         // Si se proporciona una letra de folio, ajustar la consulta para contar solo los registros que coinciden con esa letra
-//         if (filtroFolioD) {
-//             totalCountQuery += ' WHERE folio LIKE ? AND fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
-//         } else {
-//             totalCountQuery += ' WHERE fechaIngreso <= DATE_SUB(NOW(), INTERVAL 5 YEAR)';
-//         }
-
-//         const totalCount = await conn.query(totalCountQuery, queryParams);
-//         const totalRecords = totalCount[0][0].total;
-
-//         event.reply('receiveExpedientesDepurar', { 
-//             totalRecords: totalRecords,
-//             filteredRecords: totalRecords, // En este caso, no aplicamos filtros, por lo que el total y el filtrado son iguales
-//             data: result[0] 
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         event.reply('receiveExpedientesDepurar', { 
-//             totalRecords: 0,
-//             filteredRecords: 0,
-//             data: []
-//         });
-//     }
-// });
-
 
 /////////////-------CREAR NUEVO EXPEDIENTE-------/////////////
 //Función para crear nuevos expedientes clínicos
