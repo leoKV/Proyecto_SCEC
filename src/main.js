@@ -213,6 +213,30 @@ ipcMain.on('getExpedientesDepurar', async (event, page, pageSize, ...filtrosDep)
                         whereClauses.push('reposicionTarjeta = ?');
                         queryParams.push(filtro);
                         break;
+                    case 4:
+                        whereClauses.push('YEAR(fechaIngreso) = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 5:
+                        whereClauses.push('MONTH(fechaIngreso) = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 6:
+                        whereClauses.push('DAY(fechaIngreso) = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 7:
+                        whereClauses.push('YEAR(fechaNacimiento) = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 8:
+                        whereClauses.push('MONTH(fechaNacimiento) = ?');
+                        queryParams.push(filtro);
+                        break;
+                    case 9:
+                        whereClauses.push('DAY(fechaNacimiento) = ?');
+                        queryParams.push(filtro);
+                        break;
                     default:
                         break;
                 }

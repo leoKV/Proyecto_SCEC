@@ -150,8 +150,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   //     ipcRenderer.send('getExpedientesDepurar',page,pageSize);
   //   }
   // },
-  sendGetExpedientesDepurar: (page, pageSize, filtroFolioDep, filtroAfiliacionDep, filtroTarjetaDep, filtroReposicionTDep) => {
-    const filtrosDep = [filtroFolioDep, filtroAfiliacionDep, filtroTarjetaDep, filtroReposicionTDep];
+  sendGetExpedientesDepurar: (page, pageSize, filtroFolioDep, filtroAfiliacionDep, filtroTarjetaDep, filtroReposicionTDep,filtroFechaIngresoYDep,filtroFechaIngresoMDep,filtroFechaIngresoDDep,filtroFechaNacimientoYDep,filtroFechaNacimientoMDep,filtroFechaNacimientoDDep) => {
+    const filtrosDep = [filtroFolioDep, filtroAfiliacionDep, filtroTarjetaDep, filtroReposicionTDep,filtroFechaIngresoYDep,filtroFechaIngresoMDep,filtroFechaIngresoDDep,filtroFechaNacimientoYDep,filtroFechaNacimientoMDep,filtroFechaNacimientoDDep];
     ipcRenderer.send('getExpedientesDepurar', page, pageSize, ...filtrosDep);
   },
   receiveExpedientesDepurar: (callback) => {

@@ -420,6 +420,47 @@ $(document).ready(function() {
             tableDepurar.destroy();
             tableDepurar = null;
         }
+         //Obtener año actual.
+        var currentYear = new Date().getFullYear();
+        //Generando opciones para fecha de ingreso.
+        //Generar opciones de años desde la fecha de ingreso más antigua 1988 hasta el año actual.
+        for (var yearIDep = currentYear; yearIDep >= 1988; yearIDep--) {
+            $('#filtroFechaIngresoYDep').append($('<option>', {
+                value: yearIDep,
+                text: yearIDep
+            }));
+        }
+        for (var monthIDep = 1; monthIDep <= 12; monthIDep++) {
+            $('#filtroFechaIngresoMDep').append($('<option>', {
+                value: monthIDep,
+                text: monthIDep,
+            }));
+        }
+        for (var dayIDep = 1; dayIDep <= 31; dayIDep++) {
+            $('#filtroFechaIngresoDDep').append($('<option>', {
+                value: dayIDep,
+                text: dayIDep,
+            }));
+        }
+        //Generando opciones para fecha de nacimiento.
+        for (var yearNDep = currentYear; yearNDep >= 1900; yearNDep--) {
+            $('#filtroFechaNacimientoYDep').append($('<option>', {
+                value: yearNDep,
+                text: yearNDep
+            }));
+        }
+        for (var monthNDep = 1; monthNDep <= 12; monthNDep++) {
+            $('#filtroFechaNacimientoMDep').append($('<option>', {
+                value: monthNDep,
+                text: monthNDep,
+            }));
+        }
+        for (var dayNDep = 1; dayNDep <= 31; dayNDep++) {
+            $('#filtroFechaNacimientoDDep').append($('<option>', {
+                value: dayNDep,
+                text: dayNDep,
+            }));
+        }
 
         tableDepurar= $('#mydatatableDepurar').DataTable({
             "serverSide": true,
@@ -433,14 +474,37 @@ $(document).ready(function() {
                 let filtroAfiliacionDep = $('#filtroAfiliacionDep').val();
                 let filtroTarjetaDep = $('#filtroTarjetaDep').val();
                 let filtroReposicionTDep = $('#filtroReposicionTDep').val();
+                //Fecha Ingreso desglozada.
+                //Año
+                let filtroFechaIngresoYDep = $('#filtroFechaIngresoYDep').val();
+                //Mes
+                let filtroFechaIngresoMDep = $('#filtroFechaIngresoMDep').val();
+                //Día
+                let filtroFechaIngresoDDep = $('#filtroFechaIngresoDDep').val();
+                //Fecha Nacimiento desglozada.
+                //Año
+                let filtroFechaNacimientoYDep = $('#filtroFechaNacimientoYDep').val();
+                //Mes
+                let filtroFechaNacimientoMDep = $('#filtroFechaNacimientoMDep').val();
+                //Día
+                let filtroFechaNacimientoDDep = $('#filtroFechaNacimientoDDep').val();
                 // Verificaciones de filtros.
                 if (!filtroFolioDep) filtroFolioDep = null;
                 if (!filtroAfiliacionDep) filtroAfiliacionDep = null;
                 if (!filtroTarjetaDep) filtroTarjetaDep = null;
                 if (!filtroReposicionTDep) filtroReposicionTDep = null;
-             
+                //Verificación de fecha de ingreso.
+                if (!filtroFechaIngresoYDep) filtroFechaIngresoYDep = null;
+                if (!filtroFechaIngresoMDep) filtroFechaIngresoMDep = null;
+                if (!filtroFechaIngresoDDep) filtroFechaIngresoDDep = null;
+                //Verificación de fecha de nacimiento.
+                if (!filtroFechaNacimientoYDep) filtroFechaNacimientoYDep = null;
+                if (!filtroFechaNacimientoMDep) filtroFechaNacimientoMDep = null;
+                if (!filtroFechaNacimientoDDep) filtroFechaNacimientoDDep = null;
                 // Enviar solicitud al backend para obtener los datos de la página actual
-                window.electronAPI.sendGetExpedientesDepurar(page, pageSize,filtroFolioDep,filtroAfiliacionDep,filtroTarjetaDep,filtroReposicionTDep);
+                window.electronAPI.sendGetExpedientesDepurar(page, pageSize,filtroFolioDep,filtroAfiliacionDep,filtroTarjetaDep,
+                                                             filtroReposicionTDep,filtroFechaIngresoYDep,filtroFechaIngresoMDep,
+                                                             filtroFechaIngresoDDep,filtroFechaNacimientoYDep,filtroFechaNacimientoMDep,filtroFechaNacimientoDDep);
                 // Actualizar la tabla con los datos recibidos del backend
                 window.electronAPI.receiveExpedientesDepurar((expedientes) => {
                     // Formatear las fechas y generar las opciones HTML
@@ -556,6 +620,20 @@ $(document).ready(function() {
     $('#filtroTarjetaDep').on('change', function() {tableDepurar.ajax.reload();});
     // Agregar un listener para el evento de cambio en el filtro de reposición de tarjeta.
     $('#filtroReposicionTDep').on('change', function() {tableDepurar.ajax.reload();});
+    // Manejo de filtros de año en fecha de ingreso
+    //Año
+    $('#filtroFechaIngresoYDep').on('change', function() {tableDepurar.ajax.reload();});
+    //Mes
+    $('#filtroFechaIngresoMDep').on('change', function() {tableDepurar.ajax.reload();});
+    //Día
+    $('#filtroFechaIngresoDDep').on('change', function() {tableDepurar.ajax.reload();});
+    // Manejo de filtros de año en fecha de nacimiento
+    //Año
+    $('#filtroFechaNacimientoYDep').on('change', function() {tableDepurar.ajax.reload();});
+    //Mes
+    $('#filtroFechaNacimientoMDep').on('change', function() {tableDepurar.ajax.reload();});
+    //Día
+    $('#filtroFechaNacimientoDDep').on('change', function() {tableDepurar.ajax.reload();});
     //Filtros de busqueda
     $("#modalDepurar").on("shown.bs.modal", function() {
         $("#filtroNombreDep").val(""); // Limpiar el valor del buscador
@@ -565,7 +643,7 @@ $(document).ready(function() {
         $("#filtroCURPDep").val(""); // Limpiar el valor del buscador
         $("#filtroCiudadNacimientoDep").val(""); // Limpiar el valor del buscador
     });
-
+    //
     $('#filtroNombreDep').on('keyup', function() {
         let busquedaNombreD = $(this).val().toUpperCase();
         let table = $('#mydatatableDepurar').DataTable();
