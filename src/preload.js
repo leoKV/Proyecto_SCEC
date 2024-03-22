@@ -2,61 +2,11 @@
 const { contextBridge, ipcRenderer, remote } = require('electron');
 // Bandera para verificar si el listener ya está establecido
 let expedientesListenerSet = false;
-
 // Establecer el límite máximo de oyentes para el evento receiveExpedientes
 contextBridge.exposeInMainWorld('electronAPI', {
   remote: remote,
   /////////////-------LISTAR TODOS LOS EXPEDIENTES-------/////////////
   // Funciones para listar expedientes.
-  // sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion,filtroTarjeta,filtroReposicionT) => {
-  //   // Enviar la solicitud al proceso principal con los filtros correspondientes
-  //   if (filtroFolio && filtroAfiliacion) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion);
-  //   } else if (filtroFolio && !filtroAfiliacion) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, null); // Enviar null para filtroAfiliacion
-  //   } else if (filtroAfiliacion && !filtroFolio) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, null, filtroAfiliacion); // Enviar null para filtroFolio
-  //   } else {
-  //       ipcRenderer.send('getExpedientes', page, pageSize); // No hay filtros, enviar solicitud sin filtros adicionales
-  //   }
-  // },
-  // sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion, filtroTarjeta, filtroReposicionT) => {
-  //   // Enviar la solicitud al proceso principal con los filtros correspondientes
-  //   if (filtroFolio && filtroAfiliacion && filtroTarjeta && filtroReposicionT) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion, filtroTarjeta, filtroReposicionT);
-  //   } else if (filtroFolio && filtroAfiliacion && filtroTarjeta) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion, filtroTarjeta, null);
-  //   } else if (filtroFolio && filtroAfiliacion && filtroReposicionT) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion, null, filtroReposicionT);
-  //   } else if (filtroFolio && filtroAfiliacion) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, filtroAfiliacion, null, null);
-  //   } else if (filtroFolio && filtroTarjeta && filtroReposicionT) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, null, filtroTarjeta, filtroReposicionT);
-  //   } else if (filtroFolio && filtroTarjeta) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, null, filtroTarjeta, null);
-  //   } else if (filtroFolio && filtroReposicionT) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, null, null, filtroReposicionT);
-  //   } else if (filtroFolio) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, filtroFolio, null, null, null);
-  //   } else if (filtroAfiliacion && filtroTarjeta && filtroReposicionT) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, null, filtroAfiliacion, filtroTarjeta, filtroReposicionT);
-  //   } else if (filtroAfiliacion && filtroTarjeta) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, null, filtroAfiliacion, filtroTarjeta, null);
-  //   } else if (filtroAfiliacion && filtroReposicionT) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, null, filtroAfiliacion, null, filtroReposicionT);
-  //   } else if (filtroAfiliacion) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, null, filtroAfiliacion, null, null);
-  //   } else if (filtroTarjeta && filtroReposicionT) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, null, null, filtroTarjeta, filtroReposicionT);
-  //   } else if (filtroTarjeta) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, null, null, filtroTarjeta, null);
-  //   } else if (filtroReposicionT) {
-  //       ipcRenderer.send('getExpedientes', page, pageSize, null, null, null, filtroReposicionT);
-  //   } else {
-  //       ipcRenderer.send('getExpedientes', page, pageSize); // No hay filtros, enviar solicitud sin filtros adicionales
-  //   }
-  // },
-
   sendGetExpedientes: (page, pageSize, filtroFolio, filtroAfiliacion, filtroTarjeta,filtroReposicionT,filtroFechaIngresoY,filtroFechaIngresoM,filtroFechaIngresoD,filtroFechaNacimientoY,filtroFechaNacimientoM,filtroFechaNacimientoD) => {
     const filtros = [filtroFolio, filtroAfiliacion, filtroTarjeta, filtroReposicionT,filtroFechaIngresoY,filtroFechaIngresoM,filtroFechaIngresoD,filtroFechaNacimientoY,filtroFechaNacimientoM,filtroFechaNacimientoD];
     ipcRenderer.send('getExpedientes', page, pageSize, ...filtros);
@@ -141,15 +91,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
 
   /////////////-------DEPURACIÓN MASIVA DE EXPEDIENTES-------/////////////
-  //Funciones para eliminar expedientes.
   //Funciones para listar expedientes expedientes por depurar.
-  // sendGetExpedientesDepurar: (page,pageSize,filtroFolioDep) =>{
-  //   if(filtroFolioDep){
-  //     ipcRenderer.send('getExpedientesDepurar',page,pageSize,filtroFolioDep);
-  //   }else{
-  //     ipcRenderer.send('getExpedientesDepurar',page,pageSize);
-  //   }
-  // },
   sendGetExpedientesDepurar: (page, pageSize, filtroFolioDep, filtroAfiliacionDep, filtroTarjetaDep, filtroReposicionTDep,filtroFechaIngresoYDep,filtroFechaIngresoMDep,filtroFechaIngresoDDep,filtroFechaNacimientoYDep,filtroFechaNacimientoMDep,filtroFechaNacimientoDDep) => {
     const filtrosDep = [filtroFolioDep, filtroAfiliacionDep, filtroTarjetaDep, filtroReposicionTDep,filtroFechaIngresoYDep,filtroFechaIngresoMDep,filtroFechaIngresoDDep,filtroFechaNacimientoYDep,filtroFechaNacimientoMDep,filtroFechaNacimientoDDep];
     ipcRenderer.send('getExpedientesDepurar', page, pageSize, ...filtrosDep);
@@ -187,7 +129,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación
     ipcRenderer.send('searchNombresD', busquedaNombreD, page, pageSize);
   },
-
   //Edad.
   sendSearchEdad:(busquedaEdad, page, pageSize)=> {
     // Enviar la solicitud al proceso principal con el término de búsqueda y los parámetros de paginación

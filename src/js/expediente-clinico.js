@@ -157,13 +157,11 @@ $(document).ready(function() {
     const formActualizar = document.getElementById('formActualizarExp')
     $('#expedientes-tbody').on('click', '.btnActualizarExp', function () {
           idExpediente = $(this).data('id');
-          console.log('ID del expediente a actualizar',idExpediente);
           // Llamar a la función para obtener los detalles del expediente por su ID
           window.electronAPI.sendGetExpedienteById(idExpediente);
     });
     // Agregar un listener para recibir los detalles del expediente por su ID
     window.electronAPI.receiveExpedienteById((expediente) => {
-          console.log(expediente)
           if (expediente) {
               // Rellenar el formulario con los datos del expediente
               $('#folioU').val(expediente.folio); 
@@ -234,12 +232,10 @@ $(document).ready(function() {
     //Eliminación
     $('#expedientes-tbody').on('click', '.btnEliminarExp', function () {
         idExpediente = $(this).data('id');
-        console.log('Id al abrir modal eliminar: ', idExpediente);
         $('.btn-confirmar-eliminar').attr('data-id-eliminar', idExpediente);
     });
     $('.btn-confirmar-eliminar').on('click', function () {
         idExpedienteD = idExpediente
-        console.log('Id al confirmar eliminar: ', idExpedienteD);
         window.electronAPI.deleteExp(idExpedienteD);
     });
     //Alertas de Eliminación.
@@ -569,13 +565,11 @@ $(document).ready(function() {
     //Eliminación
     $('#expedientes-depuracion').on('click', '.btnEliminarExpD', function () {
         idExpediente = $(this).data('id');
-        console.log('Id al abrir modal eliminar: ', idExpediente);
         $('.btn-confirmar-eliminar-d').attr('data-id-eliminar-d', idExpediente);
     });
     
     $('.btn-confirmar-eliminar-d').on('click',async function () {
         idExpedienteD = idExpediente
-        console.log('Id al confirmar eliminar: ', idExpedienteD);
         window.electronAPI.deleteExpD(idExpedienteD);
     });
     
@@ -809,13 +803,10 @@ function limpiarCerrarModal(){
 document.getElementById("folio").addEventListener("input", function() {
     var input = this.value;
     var folioFeedback = document.getElementById("folio-feedback");
-
     // Verifica que el elemento con ID "folio-feedback" exista
     if (!folioFeedback) {
-        console.error("Elemento con ID 'folio-feedback' no encontrado en el HTML.");
         return;
     }
-
     // Verifica la longitud del valor ingresado
     if (input.length === 6) {
         // Si es válido, elimina la clase is-invalid y agrega la clase is-valid
@@ -833,13 +824,10 @@ document.getElementById("folio").addEventListener("input", function() {
 document.getElementById("curp").addEventListener("input", function() {
     var input = this.value;
     var curpFeedback = document.getElementById("curp-feedback");
-
     // Verifica que el elemento con ID "curp-feedback" exista
     if (!curpFeedback) {
-        console.error("Elemento con ID 'curp-feedback' no encontrado en el HTML.");
         return;
     }
-
     // Verifica la longitud del valor ingresado
     if (input.length === 0 || (input.length >= 1 && input.length === 18)) {
         // Si es válido, elimina la clase is-invalid y agrega la clase is-valid
